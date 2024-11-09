@@ -4,7 +4,7 @@ class CPU:
             raise Exception("Invalid number of registers")
         self.registers = registers
         self.program_counter = program_counter
-        self.instruction_register = instruction_register
+        self.instruction_register = instruction_register # Holds it as a string due to formatting issues
     
     @classmethod
     def from_dict(cls, data):

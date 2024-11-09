@@ -1,3 +1,10 @@
+import os
+import sys
+# Add the project root to the system path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Now you can import Utils from services
+from services.Utils import Utils
+
 class Memory:
     def __init__(self, memory):
         # 2D list of 256 bytes
@@ -9,6 +16,7 @@ class Memory:
                 raise Exception("Invalid memory size")
         
         self.memory = memory
+        self.utils = Utils()
     
     @classmethod
     def from_dict(cls, data):
@@ -28,7 +36,35 @@ class Memory:
     def write(self, address, data):
         if address < 0 or address > 255:
             raise Exception("Invalid memory address")
+        if len(hex(data)) > 4:
+            raise Exception("Invalid data size")
         self.memory[address // 16][address % 16] = data
+    
+    # Load a program into memory
+    def load_program(self, program: str):
+        file_path = self.utils.get_file_path(program)
+        
+        with open(file_path, "r") as file:
+            try:
+                lines = file.read().strip().split()
+            except Exception as e:
+                print(e)
+        for address, byte in enumerate(lines):
+            try:
+                self.write(address, int(byte, 16))
+            except Exception as e:
+                print(e)
+        
+    # Export the program from memory to a txt file
+    def export(self, program: str):
+        file_path = self.utils.get_file_path(program)
+        
+        with open(file_path, "w") as file:
+            for address in range(256):
+                try:
+                    file.write("0x{:02x}".format(self.read(address))[2:] + " ")
+                except Exception as e:
+                    print(e)
 
     # Print the memory
     def dump(self):

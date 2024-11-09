@@ -1,5 +1,5 @@
-from cpu_module import CPU
-from memory_module import Memory
+from .cpu_module import CPU
+from .memory_module import Memory
 import sys
 import os
 
@@ -41,6 +41,7 @@ class Machine:
     # Execute the instruction
     def Execute(self, operation: dict):
         match operation["opcode"]:
+                           
             case 0x1:
                 address = operation["operand2"] * 16 + operation["operand3"]
                 print(f"case 1 address: {hex(address)}")
@@ -56,8 +57,9 @@ class Machine:
             case 0x4:
                 print(f"case 4")
                 self.cpu.registers[operation["operand3"]] = self.cpu.registers[operation["operand2"]]  
-            # case 0x5:
-                
+            case 0x5:
+                print("case 5")
+                self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] + self.cpu.registers[operation["operand3"]]
             # case 0x6:
             #     
             case 0x7:
@@ -80,6 +82,11 @@ class Machine:
             case 0xC:
                 print(f"Halted...")
                 self.halted = True
+            case _:
+                self.halted = True
+                self.cpu.dump()
+                self.memory.dump()
+                raise Exception("Invalid opcode")
 
     # Run the machine
     def Run(self):
@@ -88,22 +95,21 @@ class Machine:
             self.Fetch()
             operation = self.Decode()
             print("executing...")
-            self.Execute(operation)
+            try:
+                self.Execute(operation)
+            except Exception as e:
+                print(e)
             self.cpu.dump()
             self.memory.dump()
             print("--------------------------------------")
+
             
 
 # run the machine
 if __name__ == "__main__":
     cpu = CPU.new()
     memory = Memory.new()
-    memory.write(0, 0x20)
-    memory.write(1, 0xa1)
-    memory.write(2, 0x21)
-    memory.write(3, 0x05)
-    memory.write(4, 0x84)
-    memory.write(5, 0x01)
-    memory.write(6, 0xc0)
+    memory.load_program("fibonacci.txt")
     machine = Machine(cpu, memory)
     machine.Run()
+
