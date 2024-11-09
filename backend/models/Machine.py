@@ -91,17 +91,12 @@ class Machine:
     # Run the machine
     def Run(self):
         while not self.halted:
-            print("fretching...")
             self.Fetch()
             operation = self.Decode()
-            print("executing...")
             try:
                 self.Execute(operation)
             except Exception as e:
                 print(e)
-            self.cpu.dump()
-            self.memory.dump()
-            print("--------------------------------------")
 
             
 
