@@ -25,7 +25,7 @@ def get_memory():
         {"memory": machine.memory.memory}
     )
 
-@app.route('/api/registers', methods=['GET'])
+@app.route('/api/cpu', methods=['GET'])
 def get_cpu():
     return jsonify(
         {"cpu":{

@@ -32,7 +32,7 @@ class MachineDisplay extends Component {
   }
 
     getRegistersData() {
-    axios.get('/api/registers')
+    axios.get('/api/cpu')
       .then((response) => {
         this.setState({registers: response.data.cpu.registers});
       })
