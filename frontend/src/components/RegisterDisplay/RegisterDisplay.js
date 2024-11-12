@@ -1,11 +1,14 @@
 import React, { useState, useEffect, Component } from 'react';
 import RunButton from '../Buttons/RunButton';
-import ClearButton from '../Buttons/ClearButton';
+import ClearMemoryButton from '../Buttons/ClearMemoryButton';
+import ClearCPUButton from '../Buttons/ClearCPUButton';
+import LoadButton from '../Buttons/LoadButton';
+
 
 class RegisterDisplay extends Component {
 
   render() {
-    const { registers, onRunClick, onClearMemoryClick } = this.props;
+    const { registers, onRunClick, onClearMemoryClick, onClearCPUClick, onLoadClick } = this.props;
 
     return (
       <div className="register-display">
@@ -20,7 +23,9 @@ class RegisterDisplay extends Component {
         </div>
         <div className="button-container">
           <RunButton onClick={onRunClick} />
-          <ClearButton onClick={onClearMemoryClick} />
+          <ClearMemoryButton onClick={onClearMemoryClick} />
+          <ClearCPUButton onClick={onClearCPUClick} />
+          <LoadButton onClick={onLoadClick}/>
         </div>
       </div>
     );

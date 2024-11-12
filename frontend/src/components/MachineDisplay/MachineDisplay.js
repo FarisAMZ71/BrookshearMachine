@@ -19,12 +19,13 @@ class MachineDisplay extends Component {
     
     this.handleRunClick = this.handleRunClick.bind(this);
     this.handleClearMemoryClick = this.handleClearMemoryClick.bind(this);
+    this.handleClearCPUClick = this.handleClearCPUClick.bind(this);
+    this.handleLoadClick = this.handleLoadClick.bind(this);
   }
 
   getMemoryData() {
     axios.get('/api/memory')
       .then((response) => {
-        console.log('Data fetched:', response.data.memory.flat(1));
         this.setState({memory: response.data.memory.flat(1)});
       })
       .catch((error) => console.error('Error fetching memory:', error));
@@ -33,7 +34,6 @@ class MachineDisplay extends Component {
     getRegistersData() {
     axios.get('/api/registers')
       .then((response) => {
-        console.log('Data fetched:', response.data.cpu.registers);
         this.setState({registers: response.data.cpu.registers});
       })
       .catch((error) => console.error('Error fetching registers:', error));
@@ -55,10 +55,9 @@ class MachineDisplay extends Component {
         return response.json();
       })
       .then(data => {
-        // Assuming the server returns updated registers and memory
         this.setState({
-          memory: data.memory.flat(1) || this.state.memory,           // Update memory
-          registers: data.cpu.registers || this.state.registers // Update registers
+          memory: data.memory.flat(1) || this.state.memory,           
+          registers: data.cpu.registers || this.state.registers 
         });
       })
       .catch(error => {
@@ -66,6 +65,7 @@ class MachineDisplay extends Component {
       });
   }
 
+  // Function to handle the "Clear Memory" button click, updates memory
   handleClearMemoryClick() {
     fetch("/api/clear_memory", {
       method: "POST",
@@ -81,7 +81,56 @@ class MachineDisplay extends Component {
         return response.json();
       })
       .then(data => {
-        // Assuming the server returns updated registers and memory
+        this.setState({
+          memory: data.memory.flat(1) || this.state.memory
+        });
+      })
+      .catch(error => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  }
+
+  // Function to handle the "Clear CPU" button click, updates registers
+  handleClearCPUClick() {
+    fetch("/api/clear_cpu", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: "Clear command initiated" })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        this.setState({
+          registers: data.cpu.registers || this.state.registers
+        });
+      })
+      .catch(error => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  }
+
+  // Function to handle the "Load" button click, updates both registers and memory
+  handleLoadClick() {
+    fetch("/api/load_program", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: "Load command initiated" })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
         this.setState({
           memory: data.memory.flat(1) || this.state.memory
         });
@@ -97,7 +146,11 @@ class MachineDisplay extends Component {
     return (
       <div className="machine-display">
         <h1>Register and Memory Display</h1>
-        <RegisterDisplay registers={registers} onRunClick={this.handleRunClick} onClearMemoryClick={this.handleClearMemoryClick}/>
+        <RegisterDisplay registers={registers}
+         onRunClick={this.handleRunClick}
+         onClearMemoryClick={this.handleClearMemoryClick}
+         onClearCPUClick={this.handleClearCPUClick}
+         onLoadClick={this.handleLoadClick}/>
         <MemoryDisplay memory={memory} />
       </div>
     );

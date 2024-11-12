@@ -97,6 +97,7 @@ class Machine:
                 self.Execute(operation)
             except Exception as e:
                 print(e)
+        self.halted = False
     
     def clearMemory(self):
         self.memory.clear()

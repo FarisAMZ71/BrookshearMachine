@@ -65,5 +65,12 @@ def clear_cpu():
         }}
     )
 
+@app.route('/api/load_program', methods=['POST'])
+def load_program():
+    machine.memory.load_program("fibonacci.txt")
+    return jsonify(
+        {"memory": machine.memory.memory}
+    )
+
 if __name__ == "__main__":
     app.run(debug=True)
