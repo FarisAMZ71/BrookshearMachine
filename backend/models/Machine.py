@@ -97,6 +97,12 @@ class Machine:
                 self.Execute(operation)
             except Exception as e:
                 print(e)
+    
+    def clearMemory(self):
+        self.memory.clear()
+    
+    def clearCPU(self):
+        self.cpu.clear()
 
             
 

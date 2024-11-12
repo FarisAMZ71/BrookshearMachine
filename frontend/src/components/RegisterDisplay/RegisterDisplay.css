@@ -36,3 +36,10 @@
 .register-value {
     color: #333;
 }
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 10px 0 10px;
+    gap: 10px;
+}

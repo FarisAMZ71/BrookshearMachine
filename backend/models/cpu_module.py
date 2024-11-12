@@ -27,3 +27,8 @@ class CPU:
         print(f"Registers: {[hex(x) for x in self.registers]}")
         print(f"Program Counter: {hex(self.program_counter)}")
         print(f"Instruction Register: {self.instruction_register}")
+    
+    def clear(self):
+        self.registers = [0] * 16
+        self.program_counter = 0
+        self.instruction_register = 0

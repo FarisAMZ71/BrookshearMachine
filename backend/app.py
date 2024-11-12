@@ -5,10 +5,11 @@ from models import *
 app = Flask(__name__)
 CORS(app)  
 
-cpu = CPU.new()
-memory = Memory.new()
-memory.load_program("fibonacci.txt")
-machine = Machine(cpu, memory)
+# cpu = CPU.new()
+# memory = Memory.new()
+# memory.load_program("fibonacci.txt")
+machine = Machine(CPU.new(), Memory.new())
+machine.memory.load_program("fibonacci.txt")
 
 @app.route('/')
 def index():
@@ -21,16 +22,16 @@ def get_data():
 @app.route('/api/memory', methods=['GET'])
 def get_memory():
     return jsonify(
-        {"message": memory.memory}
+        {"memory": machine.memory.memory}
     )
 
 @app.route('/api/registers', methods=['GET'])
 def get_cpu():
     return jsonify(
-        {"message":{
-            "registers": cpu.registers,
-            "instruction_register": cpu.instruction_register,
-            "program_counter": cpu.program_counter
+        {"cpu":{
+            "registers": machine.cpu.registers,
+            "instruction_register": machine.cpu.instruction_register,
+            "program_counter": machine.cpu.program_counter
         }}
     )
 
@@ -38,7 +39,30 @@ def get_cpu():
 def run_machine():
     machine.Run()
     return jsonify(
-        {"message": "Machine has been run!"}
+        {"memory": machine.memory.memory,
+         "cpu":{
+            "registers": machine.cpu.registers,
+            "instruction_register": machine.cpu.instruction_register,
+            "program_counter": machine.cpu.program_counter
+        }}
+    )
+
+@app.route('/api/clear_memory', methods=['POST'])
+def clear_memory():
+    machine.clearMemory()
+    return jsonify(
+        {"memory": machine.memory.memory}
+    )
+
+@app.route('/api/clear_cpu', methods=['POST'])
+def clear_cpu():
+    machine.clearCPU()
+    return jsonify(
+        {"cpu":{
+            "registers": machine.cpu.registers,
+            "instruction_register": machine.cpu.instruction_register,
+            "program_counter": machine.cpu.program_counter
+        }}
     )
 
 if __name__ == "__main__":

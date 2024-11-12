@@ -70,4 +70,8 @@ class Memory:
     def dump(self):
         for i in range(16):
             print([hex(x) for x in self.memory[i]])
+        
+    # Clear the memory
+    def clear(self):
+        self.memory = [[0] * 16 for _ in range(16)]
 
