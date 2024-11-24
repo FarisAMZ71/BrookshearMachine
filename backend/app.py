@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
 from models import *
 
@@ -10,6 +10,7 @@ CORS(app)
 # memory.load_program("fibonacci.txt")
 machine = Machine(CPU.new(), Memory.new())
 machine.memory.load_program("fibonacci.txt")
+assembler = Assembler()
 
 
 @app.route('/')
@@ -77,11 +78,20 @@ def load_program():
 # Extract the assemblyCode from the request
 def convert():
     assemblyCode = request.json['assemblyCode']
-    # Call the convert function from the machine
-    print(f"assembly code: {assemblyCode}")
-    return jsonify(
-        {"machineCode": "0x01f1"}
-    )
+    try:
+        machineCode = assembler.Assemble(assemblyCode)
+        print(f"machineCode: {machineCode}")
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "success": False,
+            "error": str(e)
+            }), 400
+    
+    return jsonify({
+        "success": True,
+        "machineCode": machineCode
+        }), 200
 
 
 if __name__ == "__main__":

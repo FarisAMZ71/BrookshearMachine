@@ -1,0 +1,21 @@
+// for comments
+empty lines are removed
+leading and trailing whitespace are removed
+
+
+Command format:
+{Command} {Target register}, {Bit pattern}
+
+Commands (from brookshear):
+LEA - load effective address
+LDR - load register
+STR - store
+MOV - move
+ADT - add 2's complement
+ADF - add floating point
+ORR - or
+AND - and
+XOR - xor
+ROT - rotate
+JMP - jump
+HLT - halt

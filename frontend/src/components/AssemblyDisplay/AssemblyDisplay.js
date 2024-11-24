@@ -26,9 +26,11 @@ class AssemblyDisplay extends Component {
       },
       body: JSON.stringify({ assemblyCode: this.state.assemblyCode })
     })
-      .then(response => {
+      .then(async response => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          const error = await response.json();
+          console.log(error);
+          throw new Error(error.error || 'Network response was not ok');
         }
         return response.json();
       })
@@ -36,7 +38,8 @@ class AssemblyDisplay extends Component {
         this.setState({ machineCode: data.machineCode });
       })
       .catch(error => {
-        console.error('There was a problem with your fetch operation:', error);
+        console.error(error.message);
+        this.setState({ machineCode: 'Error converting code: ' + error.message });
       });
   }
 
