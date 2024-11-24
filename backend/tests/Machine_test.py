@@ -6,8 +6,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.Machine import Machine
 from models.cpu_module import CPU
 from models.memory_module import Memory
-# Now you can import Utils from services
-from services.Utils import Utils
 
 class TestMachine:
     @pytest.fixture(autouse=True)

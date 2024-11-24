@@ -25,7 +25,6 @@ class RegisterDisplay extends Component {
           <RunButton onClick={onRunClick} />
           <ClearMemoryButton onClick={onClearMemoryClick} />
           <ClearCPUButton onClick={onClearCPUClick} />
-          <LoadButton onClick={onLoadClick}/>
         </div>
       </div>
     );

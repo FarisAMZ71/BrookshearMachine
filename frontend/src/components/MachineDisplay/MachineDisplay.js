@@ -2,8 +2,10 @@
 import React, { useState, useEffect, Component } from 'react';
 import MemoryDisplay from '../MemoryDisplay/MemoryDisplay';
 import RegisterDisplay from '../RegisterDisplay/RegisterDisplay';
-import '../MemoryDisplay/MemoryDisplay.css';
-import '../RegisterDisplay/RegisterDisplay.css';
+import AssemblyDisplay from '../AssemblyDisplay/AssemblyDisplay';
+// import '../MemoryDisplay/MemoryDisplay.css';
+// import '../RegisterDisplay/RegisterDisplay.css';
+import './MachineDisplay.css';
 import axios from 'axios';
 
 class MachineDisplay extends Component {
@@ -31,13 +33,13 @@ class MachineDisplay extends Component {
       .catch((error) => console.error('Error fetching memory:', error));
   }
 
-    getRegistersData() {
+  getRegistersData() {
     axios.get('/api/cpu')
       .then((response) => {
         this.setState({registers: response.data.cpu.registers});
       })
       .catch((error) => console.error('Error fetching registers:', error));
-    }
+  }
 
   // Function to handle the "Run" button click, updates both registers and memory
   handleRunClick() {
@@ -146,12 +148,19 @@ class MachineDisplay extends Component {
     return (
       <div className="machine-display">
         <h1>Register and Memory Display</h1>
-        <RegisterDisplay registers={registers}
-         onRunClick={this.handleRunClick}
-         onClearMemoryClick={this.handleClearMemoryClick}
-         onClearCPUClick={this.handleClearCPUClick}
-         onLoadClick={this.handleLoadClick}/>
-        <MemoryDisplay memory={memory} />
+        <div className="machine-display-header">
+          <div className="register-container">
+            <RegisterDisplay
+              registers={registers}
+              onRunClick={this.handleRunClick}
+              onClearMemoryClick={this.handleClearMemoryClick}
+              onClearCPUClick={this.handleClearCPUClick}
+            />
+            <AssemblyDisplay 
+              onLoadClick={this.handleLoadClick}/>
+          </div>
+          <MemoryDisplay memory={memory} />
+        </div>
       </div>
     );
   }

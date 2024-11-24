@@ -1,0 +1,64 @@
+.assembler-container {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 20px auto; /* Center the container */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+  
+  .assembler-container h2 {
+    text-align: center;
+    color: #444;
+    margin-bottom: 20px;
+  }
+  
+  .assembly-input {
+    width: 95%;
+    height: 150px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
+    resize: vertical;
+  }
+  
+  .convert-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .convert-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .machine-code-display {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    font-family: monospace;
+    font-size: 14px;
+    white-space: pre-wrap; /* Preserve formatting */
+  }
+  
+  .machine-code-display h3 {
+    margin: 0 0 10px 0;
+    color: #666;
+  }
+  
