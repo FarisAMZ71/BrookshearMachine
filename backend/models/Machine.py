@@ -60,8 +60,11 @@ class Machine:
             case 0x5:
                 print("case 5")
                 self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] + self.cpu.registers[operation["operand3"]]
-            # case 0x6:
-            #     
+            case 0x6:
+                self.cpu.registers[operation["operand1"]] = self.utils.encode_to_8bit_floating_point(
+                    self.utils.decode_8bit_floating_point(self.cpu.registers[operation["operand2"]]) + 
+                    self.utils.decode_8bit_floating_point(self.cpu.registers[operation["operand3"]])
+                    )
             case 0x7:
                 print(f"case 7")
                 self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] | self.cpu.registers[operation["operand3"]] 
@@ -111,7 +114,7 @@ class Machine:
 if __name__ == "__main__":
     cpu = CPU.new()
     memory = Memory.new()
-    memory.load_program("fibonacci.txt")
+    memory.import_program("fibonacci.txt")
     machine = Machine(cpu, memory)
     machine.Run()
 

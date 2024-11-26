@@ -11,13 +11,13 @@ class TestMachine:
     @pytest.fixture(autouse=True)
     def setup(self):
         self.memory = Memory.new()
-        self.memory.load_program("fibonacci.txt")
+        self.memory.import_program("fibonacci.txt")
         self.cpu = CPU.new()
         self.machine = Machine(self.cpu, self.memory)
     
     def reset(self):
         self.memory = Memory.new()
-        self.memory.load_program("fibonacci.txt")
+        self.memory.import_program("fibonacci.txt")
         self.cpu = CPU.new()
         self.machine = Machine(self.cpu, self.memory)
 

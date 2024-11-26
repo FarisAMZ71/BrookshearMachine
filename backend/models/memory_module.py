@@ -2,7 +2,6 @@ import os
 import sys
 # Add the project root to the system path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-# Now you can import Utils from services
 from services.Utils import Utils
 
 class Memory:
@@ -39,9 +38,18 @@ class Memory:
         if len(hex(data)) > 4:
             raise Exception("Invalid data size")
         self.memory[address // 16][address % 16] = data
-    
-    # Load a program into memory
+
+    # Load a program into memory given a string machine code
     def load_program(self, program: str):
+        program = program.strip().split()
+        for address, byte in enumerate(program):
+            try:
+                self.write(address, int(byte, 16))
+            except Exception as e:
+                print(e)
+    
+    # Load a program into memory from a txt file
+    def import_program(self, program: str):
         file_path = self.utils.get_file_path(program)
         
         with open(file_path, "r") as file:
@@ -56,7 +64,7 @@ class Memory:
                 print(e)
         
     # Export the program from memory to a txt file
-    def export(self, program: str):
+    def export_program(self, program: str):
         file_path = self.utils.get_file_path(program)
         
         with open(file_path, "w") as file:

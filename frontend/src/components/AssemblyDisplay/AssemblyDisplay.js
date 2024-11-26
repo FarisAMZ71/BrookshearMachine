@@ -36,6 +36,7 @@ class AssemblyDisplay extends Component {
       })
       .then(data => {
         this.setState({ machineCode: data.machineCode });
+        this.props.onMachineCodeGenerated(data.machineCode);
       })
       .catch(error => {
         console.error(error.message);

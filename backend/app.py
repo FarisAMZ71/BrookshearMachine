@@ -1,16 +1,18 @@
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
+import os
+import sys
 from models import *
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from services.Utils import Utils
 
 app = Flask(__name__)
 CORS(app)  
 
-# cpu = CPU.new()
-# memory = Memory.new()
-# memory.load_program("fibonacci.txt")
 machine = Machine(CPU.new(), Memory.new())
-machine.memory.load_program("fibonacci.txt")
+# machine.memory.import_program("fibonacci.txt")
 assembler = Assembler()
+utils = Utils()
 
 
 @app.route('/')
@@ -69,7 +71,10 @@ def clear_cpu():
 
 @app.route('/api/load_program', methods=['POST'])
 def load_program():
-    machine.memory.load_program("fibonacci.txt")
+    # machine.memory.load_program("fibonacci.txt")
+    # Extract machine code from the request
+    machineCode = request.json['machineCode']
+    machine.memory.load_program(machineCode)
     return jsonify(
         {"memory": machine.memory.memory}
     )

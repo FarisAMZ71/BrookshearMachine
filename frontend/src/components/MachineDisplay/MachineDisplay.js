@@ -23,6 +23,7 @@ class MachineDisplay extends Component {
     this.handleClearMemoryClick = this.handleClearMemoryClick.bind(this);
     this.handleClearCPUClick = this.handleClearCPUClick.bind(this);
     this.handleLoadClick = this.handleLoadClick.bind(this);
+    this.handleMachineCode = this.handleMachineCode.bind(this);
   }
 
   getMemoryData() {
@@ -117,6 +118,11 @@ class MachineDisplay extends Component {
       });
   }
 
+  // Function to handle the "Load" button click, updates machine code
+  handleMachineCode(machineCode) {
+    this.setState({ machineCode });
+  }
+
   // Function to handle the "Load" button click, updates both registers and memory
   handleLoadClick() {
     fetch("/api/load_program", {
@@ -124,7 +130,7 @@ class MachineDisplay extends Component {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ message: "Load command initiated" })
+      body: JSON.stringify({ machineCode: this.state.machineCode })
     })
       .then(response => {
         if (!response.ok) {
@@ -157,6 +163,7 @@ class MachineDisplay extends Component {
               onClearCPUClick={this.handleClearCPUClick}
             />
             <AssemblyDisplay 
+              onMachineCodeGenerated={this.handleMachineCode}
               onLoadClick={this.handleLoadClick}/>
           </div>
           <MemoryDisplay memory={memory} />
