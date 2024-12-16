@@ -29,6 +29,11 @@
     color: #333;
 }
 
+.memory-cell.right-column {
+    flex-direction: row-reverse; /* Flip address and value order */
+}
+
+
 .memory-address {
     font-weight: bold;
     color: #333;

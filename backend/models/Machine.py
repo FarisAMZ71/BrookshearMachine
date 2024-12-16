@@ -96,10 +96,7 @@ class Machine:
         while not self.halted:
             self.Fetch()
             operation = self.Decode()
-            try:
-                self.Execute(operation)
-            except Exception as e:
-                print(e)
+            self.Execute(operation)
         self.halted = False
     
     def clearMemory(self):

@@ -8,12 +8,20 @@ import LoadButton from '../Buttons/LoadButton';
 class RegisterDisplay extends Component {
 
   render() {
-    const { registers, onRunClick, onClearMemoryClick, onClearCPUClick, onLoadClick } = this.props;
-
+    const { instruction_register, program_counter, registers, onRunClick, onClearMemoryClick, onClearCPUClick } = this.props;
+    
     return (
       <div className="register-display">
         <h2>Registers</h2>
         <div className="register-grid">
+          <div className="register-cell">
+            <span className="register-address">IR</span>
+            <span className="register-value">{instruction_register.toString(16).padStart(2, '0').toUpperCase()}</span>
+          </div>
+          <div className="register-cell">
+            <span className="register-address">PC</span>
+            <span className="register-value">{program_counter.toString(16).padStart(2, '0').toUpperCase()}</span>
+          </div>
           {registers.map((value, address) => (
             <div key={address} className="register-cell">
               <span className="register-address">0x{address.toString(16).padStart(1, '0').toUpperCase()}</span>

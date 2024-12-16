@@ -2,7 +2,7 @@ class Assembler:
     def __init__(self):
         pass
 
-    def Assemble(self, assemblyCode: str):
+    def assemble(self, assemblyCode: str):
         assemblyCode = self.clean(assemblyCode)
         print(f"cleaned code: {assemblyCode}")
         machineCode = ""

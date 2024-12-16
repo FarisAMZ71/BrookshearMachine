@@ -41,12 +41,18 @@ def get_cpu():
 
 @app.route('/api/run', methods=['POST'])
 def run_machine():
-    machine.Run()
+    try:
+        machine.Run()
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+            }), 400
     return jsonify(
         {"memory": machine.memory.memory,
          "cpu":{
             "registers": machine.cpu.registers,
-            "instruction_register": machine.cpu.instruction_register,
+            "instruction_register": int(machine.cpu.instruction_register[2:], 16),
             "program_counter": machine.cpu.program_counter
         }}
     )
@@ -61,6 +67,9 @@ def clear_memory():
 @app.route('/api/clear_cpu', methods=['POST'])
 def clear_cpu():
     machine.clearCPU()
+    print(machine.cpu.registers)
+    print(machine.cpu.instruction_register)
+    print(machine.cpu.program_counter)
     return jsonify(
         {"cpu":{
             "registers": machine.cpu.registers,
@@ -84,7 +93,7 @@ def load_program():
 def convert():
     assemblyCode = request.json['assemblyCode']
     try:
-        machineCode = assembler.Assemble(assemblyCode)
+        machineCode = assembler.assemble(assemblyCode)
         print(f"machineCode: {machineCode}")
     except Exception as e:
         print(e)

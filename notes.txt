@@ -4,3 +4,10 @@ Steps to create new button:
 3- create handle() function
 4- add function to component args
 5- bind button in constructor
+
+LDR 0, 10
+LDR 1, 20
+ADT 2, 01
+STR 2, 11
+LEA 3, 11
+HLT 0, 00

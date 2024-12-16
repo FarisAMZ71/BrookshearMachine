@@ -12,7 +12,7 @@ class CPU:
     
     @classmethod
     def new(cls):
-        return cls([0] * 16, 0, 0)
+        return cls([0] * 16, 0, "0")
     
     def increment_program_counter(self):
         if self.program_counter == 255:
@@ -31,4 +31,4 @@ class CPU:
     def clear(self):
         self.registers = [0] * 16
         self.program_counter = 0
-        self.instruction_register = 0
+        self.instruction_register = "0"

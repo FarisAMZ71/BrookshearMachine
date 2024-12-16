@@ -12,6 +12,8 @@ class MachineDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      program_counter: 0,
+      instruction_register: 0,
       registers: Array(16).fill(0), 
       memory: Array(256).fill(0),   
     };
@@ -37,7 +39,10 @@ class MachineDisplay extends Component {
   getRegistersData() {
     axios.get('/api/cpu')
       .then((response) => {
+        console.log(response.data.cpu);
         this.setState({registers: response.data.cpu.registers});
+        this.setState({program_counter: response.data.cpu.program_counter});
+        this.setState({instruction_register: response.data.cpu.instruction_register});
       })
       .catch((error) => console.error('Error fetching registers:', error));
   }
@@ -60,7 +65,9 @@ class MachineDisplay extends Component {
       .then(data => {
         this.setState({
           memory: data.memory.flat(1) || this.state.memory,           
-          registers: data.cpu.registers || this.state.registers 
+          registers: data.cpu.registers || this.state.registers ,
+          program_counter: data.cpu.program_counter || this.state.program_counter,
+          instruction_register: data.cpu.instruction_register || this.state.instruction_register
         });
       })
       .catch(error => {
@@ -109,8 +116,11 @@ class MachineDisplay extends Component {
         return response.json();
       })
       .then(data => {
+        console.log("Program Counter: ", data.cpu.program_counter);
         this.setState({
-          registers: data.cpu.registers || this.state.registers
+          registers: data.cpu.registers || this.state.registers,
+          program_counter: data.cpu.program_counter,
+          instruction_register: data.cpu.instruction_register || this.state.instruction_register
         });
       })
       .catch(error => {
@@ -149,7 +159,7 @@ class MachineDisplay extends Component {
   }
 
   render() {
-    const { registers, memory } = this.state;
+    const { instruction_register, program_counter, registers, memory } = this.state;
     
     return (
       <div className="machine-display">
@@ -157,6 +167,8 @@ class MachineDisplay extends Component {
         <div className="machine-display-header">
           <div className="register-container">
             <RegisterDisplay
+              instruction_register={instruction_register}
+              program_counter={program_counter}
               registers={registers}
               onRunClick={this.handleRunClick}
               onClearMemoryClick={this.handleClearMemoryClick}
