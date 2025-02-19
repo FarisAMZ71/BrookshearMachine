@@ -84,6 +84,21 @@ def load_program():
         {"memory": machine.memory.memory}
     )
 
+@app.route('/api/upload_program', methods=['POST'])
+def upload_program():
+    try:
+        program = request.json['program']
+        print(program)
+        machine.memory.load_program(program)
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+            }), 400
+    return jsonify(
+        {"memory": machine.memory.memory}
+    )
+
 @app.route('/api/convert', methods=['POST'])
 # Extract the assemblyCode from the request
 def convert():

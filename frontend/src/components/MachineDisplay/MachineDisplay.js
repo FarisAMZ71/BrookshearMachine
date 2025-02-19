@@ -29,6 +29,7 @@ class MachineDisplay extends Component {
     this.handleLoadClick = this.handleLoadClick.bind(this);
     this.handleMachineCode = this.handleMachineCode.bind(this);
     this.saveMemoryToFile = this.saveMemoryToFile.bind(this);
+    this.handleFileUpload = this.handleFileUpload.bind(this);
   }
 
   getMemoryData() {
@@ -138,15 +139,45 @@ class MachineDisplay extends Component {
     this.setState({ machineCode });
   }
 
+  // Function to save memory contents to a file
   saveMemoryToFile() {
     const element = document.createElement('a');
     this.state.memoryContents = this.state.memory.map(int => int.toString(16).padStart(2, '0')).join(' ');
     const file = new Blob([this.state.memoryContents], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = 'program.txt';
-    document.body.appendChild(element); // Required for this to work in FireFox
+    document.body.appendChild(element); 
     element.click();
     document.body.removeChild(element);
+  }
+
+  // Function to handle file upload
+  handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fileContents = e.target.result;
+        this.setState({ memory: fileContents.split(' ') });
+
+        // Send POST request to load the program into memory
+        fetch('/api/upload_program', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ program: fileContents })
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.setState({ memory: data.memory.flat(1) || this.state.memory });
+          })
+          .catch(error => {
+            console.error("There was a problem with the fetch operation:", error);
+          });
+      };
+      reader.readAsText(file);
+    }
   }
 
   // Function to handle the "Load" button click, updates both registers and memory
@@ -190,7 +221,13 @@ class MachineDisplay extends Component {
               onClearMemoryClick={this.handleClearMemoryClick}
               onClearCPUClick={this.handleClearCPUClick}
             />
-            <button onClick={this.saveMemoryToFile}>Save Program to File</button>
+            <div className="button-container">
+              <button onClick={this.saveMemoryToFile}>Save Program</button>
+              <input type="file" id="file-upload" accept=".txt" onChange={this.handleFileUpload} style={{ display: 'none' }} />
+              <label htmlFor="file-upload" className="custom-file-upload">
+                Upload Program
+              </label>
+            </div>
             <AssemblyDisplay 
               onMachineCodeGenerated={this.handleMachineCode}
               onLoadClick={this.handleLoadClick}/>

@@ -69,7 +69,7 @@ class Machine:
             case 0x8:
                 self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] & self.cpu.registers[operation["operand3"]]
             case 0x9:
-                self.cpu.registers[operatiaon["operand1"]] = self.cpu.registers[operation["operand2"]] ^ self.cpu.registers[operation["operand3"]]
+                self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] ^ self.cpu.registers[operation["operand3"]]
             case 0xA:
                 self.cpu.registers[operation["operand1"]] = self.utils.bit_cycle_right(self.cpu.registers[operation["operand1"]], operation["operand3"]) 
             case 0xB:
