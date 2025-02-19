@@ -15,7 +15,9 @@ class MachineDisplay extends Component {
       program_counter: 0,
       instruction_register: 0,
       registers: Array(16).fill(0), 
-      memory: Array(256).fill(0),   
+      memory: Array(256).fill(0),
+      machineCode: '',
+      memoryContents: 'Example memory contents' // Replace with actual memory contents
     };
 
     this.getMemoryData();
@@ -26,6 +28,7 @@ class MachineDisplay extends Component {
     this.handleClearCPUClick = this.handleClearCPUClick.bind(this);
     this.handleLoadClick = this.handleLoadClick.bind(this);
     this.handleMachineCode = this.handleMachineCode.bind(this);
+    this.saveMemoryToFile = this.saveMemoryToFile.bind(this);
   }
 
   getMemoryData() {
@@ -135,6 +138,17 @@ class MachineDisplay extends Component {
     this.setState({ machineCode });
   }
 
+  saveMemoryToFile() {
+    const element = document.createElement('a');
+    this.state.memoryContents = this.state.memory.map(int => int.toString(16).padStart(2, '0')).join(' ');
+    const file = new Blob([this.state.memoryContents], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'program.txt';
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+    document.body.removeChild(element);
+  }
+
   // Function to handle the "Load" button click, updates both registers and memory
   handleLoadClick() {
     fetch("/api/load_program", {
@@ -176,6 +190,7 @@ class MachineDisplay extends Component {
               onClearMemoryClick={this.handleClearMemoryClick}
               onClearCPUClick={this.handleClearCPUClick}
             />
+            <button onClick={this.saveMemoryToFile}>Save Program to File</button>
             <AssemblyDisplay 
               onMachineCodeGenerated={this.handleMachineCode}
               onLoadClick={this.handleLoadClick}/>

@@ -11,7 +11,6 @@ CORS(app)
 
 machine = Machine(CPU.new(), Memory.new())
 # machine.memory.import_program("fibonacci.txt")
-assembler = Assembler()
 utils = Utils()
 
 
@@ -90,7 +89,7 @@ def load_program():
 def convert():
     assemblyCode = request.json['assemblyCode']
     try:
-        machineCode = assembler.assemble(assemblyCode)
+        machineCode = machine.Assemble(assemblyCode)
     except Exception as e:
         return jsonify({
             "success": False,

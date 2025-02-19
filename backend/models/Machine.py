@@ -1,5 +1,6 @@
 from .cpu_module import CPU
 from .memory_module import Memory
+from .Assembler import Assembler
 import sys
 import os
 
@@ -13,8 +14,12 @@ class Machine:
     def __init__(self, cpu, memory):
         self.cpu = cpu
         self.memory = memory
+        self.assembler = Assembler()
         self.utils = Utils()
         self.halted = False
+
+    def Assemble(self, assemblyCode: str):
+        return self.assembler.assemble(assemblyCode)
     
     # Fetch the instruction from memory (2 bytes)
     def Fetch(self):
@@ -64,7 +69,7 @@ class Machine:
             case 0x8:
                 self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] & self.cpu.registers[operation["operand3"]]
             case 0x9:
-                self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] ^ self.cpu.registers[operation["operand3"]]
+                self.cpu.registers[operatiaon["operand1"]] = self.cpu.registers[operation["operand2"]] ^ self.cpu.registers[operation["operand3"]]
             case 0xA:
                 self.cpu.registers[operation["operand1"]] = self.utils.bit_cycle_right(self.cpu.registers[operation["operand1"]], operation["operand3"]) 
             case 0xB:
