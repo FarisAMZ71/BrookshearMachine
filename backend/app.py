@@ -67,9 +67,6 @@ def clear_memory():
 @app.route('/api/clear_cpu', methods=['POST'])
 def clear_cpu():
     machine.clearCPU()
-    print(machine.cpu.registers)
-    print(machine.cpu.instruction_register)
-    print(machine.cpu.program_counter)
     return jsonify(
         {"cpu":{
             "registers": machine.cpu.registers,
@@ -94,9 +91,7 @@ def convert():
     assemblyCode = request.json['assemblyCode']
     try:
         machineCode = assembler.assemble(assemblyCode)
-        print(f"machineCode: {machineCode}")
     except Exception as e:
-        print(e)
         return jsonify({
             "success": False,
             "error": str(e)

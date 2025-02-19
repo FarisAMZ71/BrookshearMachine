@@ -4,7 +4,6 @@ class Assembler:
 
     def assemble(self, assemblyCode: str):
         assemblyCode = self.clean(assemblyCode)
-        print(f"cleaned code: {assemblyCode}")
         machineCode = ""
         instruction_map = {
             "LEA": "1",
@@ -30,7 +29,7 @@ class Assembler:
         # Add the operands
             operands = line[4:].split(",")
             operands = [x.strip() for x in operands]
-            print(f"operands: {operands}")
+
             # Add target register
             if(int(operands[0], 16) < 0 or int(operands[0], 16) > 15):
                 raise Exception(f"Invalid register in line {i+1}")
@@ -41,7 +40,6 @@ class Assembler:
                 raise Exception(f"Invalid bit pattern in line {i+1}")
             machineCode += f"{str(operands[1]).lower()} "
         
-        print(f"machineCode: {machineCode}")
         return machineCode
     
     def clean(self, code: str):

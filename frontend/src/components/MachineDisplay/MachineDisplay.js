@@ -40,9 +40,11 @@ class MachineDisplay extends Component {
     axios.get('/api/cpu')
       .then((response) => {
         console.log(response.data.cpu);
-        this.setState({registers: response.data.cpu.registers});
-        this.setState({program_counter: response.data.cpu.program_counter});
-        this.setState({instruction_register: response.data.cpu.instruction_register});
+        this.setState({
+          registers: response.data.cpu.registers,
+          program_counter: response.data.cpu.program_counter,
+          instruction_register: response.data.cpu.instruction_register
+        });        
       })
       .catch((error) => console.error('Error fetching registers:', error));
   }
@@ -116,7 +118,7 @@ class MachineDisplay extends Component {
         return response.json();
       })
       .then(data => {
-        console.log("Program Counter: ", data.cpu.program_counter);
+        
         this.setState({
           registers: data.cpu.registers || this.state.registers,
           program_counter: data.cpu.program_counter,

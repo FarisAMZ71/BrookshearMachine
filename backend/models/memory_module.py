@@ -49,8 +49,8 @@ class Memory:
                 print(e)
     
     # Load a program into memory from a txt file
-    def import_program(self, program: str):
-        file_path = self.utils.get_file_path(program)
+    def import_program(self, program_name: str):
+        file_path = self.utils.get_file_path(program_name)
         
         with open(file_path, "r") as file:
             try:
@@ -64,8 +64,8 @@ class Memory:
                 print(e)
         
     # Export the program from memory to a txt file
-    def export_program(self, program: str):
-        file_path = self.utils.get_file_path(program)
+    def export_program(self, program_name: str):
+        file_path = self.utils.get_file_path(program_name)
         
         with open(file_path, "w") as file:
             for address in range(256):
