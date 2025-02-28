@@ -1,8 +1,10 @@
 class Assembler:
     def __init__(self):
-        pass
+        self.assemblyCode = ""
+        self.machineCode = ""
 
     def assemble(self, assemblyCode: str):
+        self.assemblyCode = assemblyCode
         assemblyCode = self.clean(assemblyCode)
         machineCode = ""
         instruction_map = {
@@ -39,7 +41,7 @@ class Assembler:
             if(int(operands[1], 16) < 0 or int(operands[1], 16) > 255):
                 raise Exception(f"Invalid bit pattern in line {i+1}")
             machineCode += f"{str(operands[1]).lower()} "
-        
+        self.machineCode = machineCode
         return machineCode
     
     def clean(self, code: str):
@@ -55,4 +57,6 @@ class Assembler:
         lines = list(map(lambda x: x.split(":")[-1].strip(), lines))
         # Remove the empty list elements
         lines = list(filter(lambda x: x != "", lines))
+        # Convert to uppercase
+        lines = list(map(lambda x: x.upper(), lines))
         return lines

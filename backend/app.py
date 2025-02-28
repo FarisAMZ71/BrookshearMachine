@@ -89,8 +89,10 @@ def upload_program():
     try:
         program = request.json['program']
         print(program)
-        machine.memory.load_program(program)
+        machineCode = machine.Assemble(program)
+        machine.memory.load_program(machineCode)
     except Exception as e:
+        print(e)
         return jsonify({
             "success": False,
             "error": str(e)
@@ -105,6 +107,10 @@ def convert():
     assemblyCode = request.json['assemblyCode']
     try:
         machineCode = machine.Assemble(assemblyCode)
+        machine.assembler.assemblyCode = assemblyCode
+        machine.assembler.machineCode = machineCode
+        print(machine.assembler.assemblyCode)
+        print(machine.assembler.machineCode)
     except Exception as e:
         return jsonify({
             "success": False,

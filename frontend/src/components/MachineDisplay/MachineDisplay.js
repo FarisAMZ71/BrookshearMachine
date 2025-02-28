@@ -16,8 +16,9 @@ class MachineDisplay extends Component {
       instruction_register: 0,
       registers: Array(16).fill(0), 
       memory: Array(256).fill(0),
+      assemblyCode: '',
       machineCode: '',
-      memoryContents: 'Example memory contents' // Replace with actual memory contents
+      memoryContents: '' 
     };
 
     this.getMemoryData();
@@ -27,7 +28,8 @@ class MachineDisplay extends Component {
     this.handleClearMemoryClick = this.handleClearMemoryClick.bind(this);
     this.handleClearCPUClick = this.handleClearCPUClick.bind(this);
     this.handleLoadClick = this.handleLoadClick.bind(this);
-    this.handleMachineCode = this.handleMachineCode.bind(this);
+    this.setMachineCodeState = this.setMachineCodeState.bind(this);
+    this.setAssemblyCodeState = this.setAssemblyCodeState.bind(this);
     this.saveMemoryToFile = this.saveMemoryToFile.bind(this);
     this.handleFileUpload = this.handleFileUpload.bind(this);
   }
@@ -135,14 +137,19 @@ class MachineDisplay extends Component {
   }
 
   // Function to handle the "Load" button click, updates machine code
-  handleMachineCode(machineCode) {
+  setMachineCodeState(machineCode) {
     this.setState({ machineCode });
+  }
+
+  // Function to update assembly code in class state
+  setAssemblyCodeState(assemblyCode) {
+    this.setState({ assemblyCode });
   }
 
   // Function to save memory contents to a file
   saveMemoryToFile() {
     const element = document.createElement('a');
-    this.state.memoryContents = this.state.memory.map(int => int.toString(16).padStart(2, '0')).join(' ');
+    this.state.memoryContents = this.state.assemblyCode;
     const file = new Blob([this.state.memoryContents], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = 'program.txt';
@@ -229,7 +236,8 @@ class MachineDisplay extends Component {
               </label>
             </div>
             <AssemblyDisplay 
-              onMachineCodeGenerated={this.handleMachineCode}
+              onAssemblyCodeGenerated={this.setAssemblyCodeState}
+              onMachineCodeGenerated={this.setMachineCodeState}
               onLoadClick={this.handleLoadClick}/>
           </div>
           <MemoryDisplay memory={memory} />

@@ -11,3 +11,26 @@ ADT 2, 01
 STR 2, 11
 LEA 3, 11
 HLT 0, 00
+
+add  save and load
+live machineCode generation
+
+what command could be in the assembler 
+which can be assembled into more than one brookshear instructin eg sub, mul
+
+maximum expadibality usin minimum instruction
+branch, branch and return, stack, linking
+
+add colors from machine codde to memory
+look at assembly books first chapters
+
+look at color coding(accessability + consistancy)
+make mobile friendly
+
+instruction extending (if 1111 then subset of instructions)
+standards for function calls in assembly
+
+link registers + stacks
+paging
+instruction extending
+branch and link+ exchange

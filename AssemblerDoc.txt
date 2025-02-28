@@ -21,16 +21,3 @@ JMP - jump
 HLT - halt
 
 
-add  save and load
-live machineCode generation
-
-what command could be in the assembler 
-which can be assembled into more than one brookshear instructin eg sub, mul
-
-maximum expadibality usin minimum instruction
-branch, branch and return, stack, linking
-
-add colors from machine codde to memory
-look at assembly books first chapters
-
-look at color coding(accessability + consistancy)
