@@ -3,12 +3,13 @@ import RunButton from '../Buttons/RunButton';
 import ClearMemoryButton from '../Buttons/ClearMemoryButton';
 import ClearCPUButton from '../Buttons/ClearCPUButton';
 import LoadButton from '../Buttons/LoadButton';
+import StepButton from '../Buttons/StepButton';
 
 
 class RegisterDisplay extends Component {
 
   render() {
-    const { instruction_register, program_counter, registers, onRunClick, onClearMemoryClick, onClearCPUClick } = this.props;
+    const { instruction_register, program_counter, registers, onRunClick, onStepClick, onClearMemoryClick, onClearCPUClick } = this.props;
     
     return (
       <div className="register-display">
@@ -31,6 +32,7 @@ class RegisterDisplay extends Component {
         </div>
         <div className="button-container">
           <RunButton onClick={onRunClick} />
+          <StepButton onClick={onStepClick} />
           <ClearMemoryButton onClick={onClearMemoryClick} />
           <ClearCPUButton onClick={onClearCPUClick} />
         </div>

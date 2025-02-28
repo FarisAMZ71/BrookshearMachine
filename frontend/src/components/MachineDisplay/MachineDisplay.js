@@ -25,6 +25,7 @@ class MachineDisplay extends Component {
     this.getRegistersData();
     
     this.handleRunClick = this.handleRunClick.bind(this);
+    this.handleStepClick = this.handleStepClick.bind(this);
     this.handleClearMemoryClick = this.handleClearMemoryClick.bind(this);
     this.handleClearCPUClick = this.handleClearCPUClick.bind(this);
     this.handleLoadClick = this.handleLoadClick.bind(this);
@@ -74,6 +75,34 @@ class MachineDisplay extends Component {
         this.setState({
           memory: data.memory.flat(1) || this.state.memory,           
           registers: data.cpu.registers || this.state.registers ,
+          program_counter: data.cpu.program_counter || this.state.program_counter,
+          instruction_register: data.cpu.instruction_register || this.state.instruction_register
+        });
+      })
+      .catch(error => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  }
+
+  // Function to handle the "Step" button click, updates both registers and memory
+  handleStepClick() {
+    fetch("/api/step", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: "Step command initiated" })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        this.setState({
+          memory: data.memory.flat(1) || this.state.memory,
+          registers: data.cpu.registers || this.state.registers,
           program_counter: data.cpu.program_counter || this.state.program_counter,
           instruction_register: data.cpu.instruction_register || this.state.instruction_register
         });
@@ -225,6 +254,7 @@ class MachineDisplay extends Component {
               program_counter={program_counter}
               registers={registers}
               onRunClick={this.handleRunClick}
+              onStepClick={this.handleStepClick}
               onClearMemoryClick={this.handleClearMemoryClick}
               onClearCPUClick={this.handleClearCPUClick}
             />

@@ -80,8 +80,8 @@ class Machine:
                 self.halted = True
             case _:
                 self.halted = True
-                self.cpu.dump()
-                self.memory.dump()
+                # self.cpu.dump()
+                # self.memory.dump()
                 raise Exception("Invalid opcode")
 
     # Run the machine
@@ -91,6 +91,14 @@ class Machine:
             operation = self.Decode()
             self.Execute(operation)
         self.halted = False
+
+    # Step one clock cycle
+    def Step(self):
+        if not self.halted:
+            self.Fetch()
+            operation = self.Decode()
+            self.Execute(operation)
+
     
     def clearMemory(self):
         self.memory.clear()

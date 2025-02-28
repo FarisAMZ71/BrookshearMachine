@@ -56,6 +56,24 @@ def run_machine():
         }}
     )
 
+@app.route('/api/step', methods=['POST'])
+def step_machine():
+    try:
+        machine.Step()
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+            }), 400
+    return jsonify(
+        {"memory": machine.memory.memory,
+         "cpu":{
+            "registers": machine.cpu.registers,
+            "instruction_register": int(machine.cpu.instruction_register[2:], 16),
+            "program_counter": machine.cpu.program_counter
+        }}
+    )
+
 @app.route('/api/clear_memory', methods=['POST'])
 def clear_memory():
     machine.clearMemory()
