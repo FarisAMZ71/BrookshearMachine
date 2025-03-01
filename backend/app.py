@@ -117,7 +117,10 @@ def upload_program():
             "error": str(e)
             }), 400
     return jsonify(
-        {"memory": machine.memory.memory}
+        {
+            "memory": machine.memory.memory,
+            "assemblyCode": machine.assembler.assemblyCode
+        }
     )
 
 @app.route('/api/convert', methods=['POST'])

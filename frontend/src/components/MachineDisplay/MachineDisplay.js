@@ -28,6 +28,7 @@ class MachineDisplay extends Component {
     this.handleStepClick = this.handleStepClick.bind(this);
     this.handleClearMemoryClick = this.handleClearMemoryClick.bind(this);
     this.handleClearCPUClick = this.handleClearCPUClick.bind(this);
+    this.handleConvertClick = this.handleConvertClick.bind(this);
     this.handleLoadClick = this.handleLoadClick.bind(this);
     this.setMachineCodeState = this.setMachineCodeState.bind(this);
     this.setAssemblyCodeState = this.setAssemblyCodeState.bind(this);
@@ -171,7 +172,8 @@ class MachineDisplay extends Component {
   }
 
   // Function to update assembly code in class state
-  setAssemblyCodeState(assemblyCode) {
+  setAssemblyCodeState(event) {
+    const assemblyCode = event.target.value;
     this.setState({ assemblyCode });
   }
 
@@ -195,6 +197,7 @@ class MachineDisplay extends Component {
       reader.onload = (e) => {
         const fileContents = e.target.result;
         this.setState({ memory: fileContents.split(' ') });
+        this.setState({ assemblyCode: fileContents });
 
         // Send POST request to load the program into memory
         fetch('/api/upload_program', {
@@ -214,6 +217,33 @@ class MachineDisplay extends Component {
       };
       reader.readAsText(file);
     }
+  }
+
+  // Function to convert assembly code to machine code
+  handleConvertClick() {
+    // Make a POST request to the server
+    fetch('/api/convert', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ assemblyCode: this.state.assemblyCode })
+    })
+      .then(async response => {
+        if (!response.ok) {
+          const error = await response.json();
+          console.log(error);
+          throw new Error(error.error || 'Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        this.setState({ machineCode: data.machineCode });
+      })
+      .catch(error => {
+        console.error(error.message);
+        this.setState({ machineCode: 'Error converting code: ' + error.message });
+      });
   }
 
   // Function to handle the "Load" button click, updates both registers and memory
@@ -266,8 +296,11 @@ class MachineDisplay extends Component {
               </label>
             </div>
             <AssemblyDisplay 
+              assemblyCode={this.state.assemblyCode}
+              machineCode={this.state.machineCode}
               onAssemblyCodeGenerated={this.setAssemblyCodeState}
-              onMachineCodeGenerated={this.setMachineCodeState}
+              // onMachineCodeGenerated={this.setMachineCodeState}
+              onConvertClick={this.handleConvertClick}
               onLoadClick={this.handleLoadClick}/>
           </div>
           <MemoryDisplay memory={memory} />

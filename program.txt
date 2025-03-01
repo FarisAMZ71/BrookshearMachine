@@ -1,5 +1,5 @@
 LDR 0, 10
-LDR 1, 21
+LDR 1, 20
 ADT 2, 01
 STR 2, 11
 LEA 3, 11
