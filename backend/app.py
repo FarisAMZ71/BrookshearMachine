@@ -60,6 +60,7 @@ def run_machine():
 def step_machine():
     try:
         machine.Step()
+        print(machine.cpu.instruction_register[2:])
     except Exception as e:
         return jsonify({
             "success": False,

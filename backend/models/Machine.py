@@ -98,6 +98,8 @@ class Machine:
             self.Fetch()
             operation = self.Decode()
             self.Execute(operation)
+            self.cpu.dump()
+            self.memory.dump()
 
     
     def clearMemory(self):
@@ -105,6 +107,7 @@ class Machine:
     
     def clearCPU(self):
         self.cpu.clear()
+        self.halted = False
 
             
 
