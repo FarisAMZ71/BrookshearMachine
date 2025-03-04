@@ -3,8 +3,9 @@
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
-    max-width: 600px;
-    margin: 20px auto; /* Center the container */
+    max-width: 30rem;
+    min-width: 20rem;
+    margin: 20px 10px; /* Center the container */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
   }
