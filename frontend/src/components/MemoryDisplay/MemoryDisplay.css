@@ -2,9 +2,10 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    max-width: 25rem;
-    min-width: 20rem;
+    max-width: 35rem;
+    min-width: 33rem;
     margin: auto;
+    text-align: center;
 }
 
 .memory-display h2 {
@@ -12,11 +13,40 @@
     font-size: 1.2rem;
 }
 
-.memory-grid {
+/* Max width when in List View */
+.memory-display.list-mode {
+    max-width: 26rem;
+    min-width: 26rem;
+}
+
+/* Max width when in Grid View */
+.memory-display.grid-mode {
+    max-width: 35rem;
+    min-width: 30rem;
+}
+
+.view-toggle {
+    margin-bottom: 10px;
+}
+
+.view-toggle label {
+    margin-right: 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.memory-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* List View */
+.memory-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    margin-top: 10px;
+    width: 30rem;
 }
 
 .memory-cell {
@@ -30,16 +60,47 @@
     color: #333;
 }
 
-.memory-cell.right-column {
-    flex-direction: row-reverse; /* Flip address and value order */
+.memory-grid-container {
+    overflow-x: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
+.memory-grid {
+    border-collapse: collapse;
+    font-family: monospace;
+    width: auto;
+    table-layout: fixed; /* Ensures uniform column widths */
+    border: 1px solid #ccc;
+}
 
-.memory-address {
+.memory-grid th,
+.memory-grid td {
+    border: 0px solid #ccc;
+    padding: 5px;
+    text-align: center;
+    font-size: 0.9rem;
+    min-width: 30px; /* Ensures cells stay uniform */
+    width: 30px;
+    box-sizing: border-box; /* Prevents padding from affecting width */
+}
+
+.memory-grid th {
+    background: #e0e0e0;
     font-weight: bold;
-    color: #333;
 }
 
-.memory-value {
-    color: #333;
+.memory-grid thead {
+    display: table-header-group;
 }
+
+.memory-grid tbody {
+    display: table-row-group;
+}
+
+.memory-grid tbody th {
+    background: #e0e0e0;
+    width: 30px; /* Ensure row headers match column headers */
+}
+

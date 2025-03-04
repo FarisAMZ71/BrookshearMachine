@@ -57,7 +57,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  .register-grid, .memory-grid {
+  .register-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Create two columns */
     gap: 10px;
