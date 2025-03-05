@@ -36,6 +36,7 @@
   }
   
   .register-display {
+    font-family: monospace;
     background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -49,6 +50,7 @@
   }
 
   .memory-display {
+    font-family: monospace;
     background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 8px;
