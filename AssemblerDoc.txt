@@ -9,8 +9,8 @@ Command format:
 Commands (from brookshear):
 LEA - load effective address
 LDR - load register
-STR - store
-MOV - move
+STR - store to memory
+MOV - move value between registers
 ADT - add 2's complement
 ADF - add floating point
 ORR - or

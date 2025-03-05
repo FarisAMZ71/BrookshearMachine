@@ -1,7 +1,6 @@
 import os
 import sys
 import pytest # type: ignore
-# Add the project root to the system path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.Machine import Machine
 from models.cpu_module import CPU

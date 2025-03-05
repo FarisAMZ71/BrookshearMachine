@@ -31,6 +31,9 @@ class Assembler:
         # Add the operands
             operands = line[4:].split(",")
             operands = [x.strip() for x in operands]
+            if len(operands[1]) == 1:
+                operands[1] = "0" + operands[1]
+            print(len(operands))
 
             # Add target register
             if(int(operands[0], 16) < 0 or int(operands[0], 16) > 15):
