@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/media/faris/OS/Users/najla/Documents/CPC/College/Sheffield/Year 3/COM3610 Dissertation Project/BrookshearMachine/project/bin/python" "$0" "$@"
+'''exec' "/media/faris/OS/Users/najla/Documents/CPC/College/Sheffield/Year 3/COM3610 Dissertation Project/BrookshearMachine/.project/bin/python" "$0" "$@"
 ' '''
 # -*- coding: utf-8 -*-
 import re
