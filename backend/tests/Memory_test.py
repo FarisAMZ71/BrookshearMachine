@@ -3,7 +3,7 @@ import sys
 import pytest # type: ignore
 from unittest.mock import mock_open, patch
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from models.memory_module import Memory
+from models.Base_Brookshear.memory_module import Memory
 
 def test_memory_initialization():
     """Test proper initialization of the Memory class."""

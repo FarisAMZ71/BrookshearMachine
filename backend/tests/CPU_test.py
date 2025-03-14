@@ -2,7 +2,7 @@ import os
 import sys
 import pytest # type: ignore
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from models.cpu_module import CPU
+from models.Base_Brookshear.cpu_module import CPU
 
 
 def test_cpu_initialization():

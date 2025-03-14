@@ -1,49 +1,25 @@
-from .cpu_module import CPU
-from .memory_module import Memory
-from .Assembler import Assembler
+from ..Base_Brookshear.Machine import Machine
+from ..Base_Brookshear.cpu_module import CPU
+from ..Base_Brookshear.memory_module import Memory
+from ..Base_Brookshear.Assembler import Assembler
+
+from .cpu_module_stack import CPU_Stack
+from .memory_module_stack import Memory_Stack
+from .Assembler_stack import Assembler_Stack
 import sys
 import os
 
-# Add the project root to the system path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-# Now you can import Utils from services
 from services.Utils import Utils
-# from services import Utils
-class Machine:
-    def __init__(self, cpu, memory):
-        self.cpu = cpu
-        self.memory = memory
-        self.assembler = Assembler()
-        self.utils = Utils()
-        self.halted = False
 
-    def Assemble(self, assemblyCode: str):
-        return self.assembler.assemble(assemblyCode)
-    
-    # Fetch the instruction from memory (2 bytes)
-    def Fetch(self):
-        address = self.cpu.program_counter
-        self.cpu.increment_program_counter()
-        self.cpu.instruction_register =  "0x{:02x}".format(self.memory.read(address)) + "{:02x}".format(self.memory.read(address + 1))# Holds it as a string
-        self.cpu.dump()
-    
-    # Decode the instruction (Brookshear instruction set)
-    def Decode(self):
-        if len(self.cpu.instruction_register) != 6:
-            raise Exception("Invalid instruction length")
-        
-        operation = {
-            "opcode": int(self.cpu.instruction_register[2], 16),
-            "operand1": int(self.cpu.instruction_register[3], 16),
-            "operand2": int(self.cpu.instruction_register[4], 16),
-            "operand3": int(self.cpu.instruction_register[5], 16)
-        }
+class Machine_Stack(Machine):
+    def __init__(self, cpu, memory, assembler):
+        super().__init__(cpu, memory, assembler)
 
-        return operation
-    
-    # Execute the instruction
+    # Overriding the Execute method
     def Execute(self, operation: dict):
+        print("in stack execute")
+        print(operation)
         match operation["opcode"]:
                            
             case 0x1:
@@ -78,44 +54,15 @@ class Machine:
                     self.cpu.set_program_counter(address)
             case 0xC:
                 self.halted = True
+            case 0xD:
+                self.memory.write(self.cpu.stack_pointer, self.cpu.registers[operation["operand1"]])
+                self.cpu.push()
+            case 0xE:
+                self.cpu.registers[operation["operand1"]] = self.memory.read(self.cpu.stack_pointer)
+                self.memory.write(self.cpu.stack_pointer, 0x00)
+                self.cpu.pop()
             case _:
                 self.halted = True
                 # self.cpu.dump()
                 # self.memory.dump()
                 raise Exception("Invalid opcode")
-
-    # Run the machine
-    def Run(self):
-        while not self.halted:
-            self.Fetch()
-            operation = self.Decode()
-            self.Execute(operation)
-        self.halted = False
-
-    # Step one clock cycle
-    def Step(self):
-        if not self.halted:
-            self.Fetch()
-            operation = self.Decode()
-            self.Execute(operation)
-            self.cpu.dump()
-            self.memory.dump()
-
-    
-    def clearMemory(self):
-        self.memory.clear()
-    
-    def clearCPU(self):
-        self.cpu.clear()
-        self.halted = False
-
-            
-
-# run the machine
-if __name__ == "__main__":
-    cpu = CPU.new()
-    memory = Memory.new()
-    memory.import_program("fibonacci.txt")
-    machine = Machine(cpu, memory)
-    machine.Run()
-

@@ -12,6 +12,10 @@ STR 2, 11
 LEA 3, 11
 HLT 0, 00
 
+LDR 0, 10
+PSH 0, 00
+POP 1, 00
+
 add  save and load
 live machineCode generation
 
@@ -33,4 +37,8 @@ standards for function calls in assembly
 link registers + stacks
 paging
 instruction extending
-branch and link+ exchange
+
+
+(branch and link+ exchange)
+run speed 
+save program after closure

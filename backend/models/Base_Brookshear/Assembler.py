@@ -2,12 +2,7 @@ class Assembler:
     def __init__(self):
         self.assemblyCode = ""
         self.machineCode = ""
-
-    def assemble(self, assemblyCode: str):
-        self.assemblyCode = assemblyCode
-        assemblyCode = self.clean(assemblyCode)
-        machineCode = ""
-        instruction_map = {
+        self.instruction_map = {
             "LEA": "1",
             "LDR": "2",
             "STR": "3",
@@ -21,10 +16,15 @@ class Assembler:
             "JMP": "B",
             "HLT": "C"
         }
+
+    def assemble(self, assemblyCode: str):
+        self.assemblyCode = assemblyCode
+        assemblyCode = self.clean(assemblyCode)
+        machineCode = ""
         for i, line in enumerate(assemblyCode):
         # Add instruction opcode
-            if line.split(" ")[0] in instruction_map:
-                machineCode += instruction_map[line[:3]]
+            if line.split(" ")[0] in self.instruction_map:
+                machineCode += self.instruction_map[line[:3]]
             else:
                 raise Exception(f"Invalid instruction in line {i+1}")
             

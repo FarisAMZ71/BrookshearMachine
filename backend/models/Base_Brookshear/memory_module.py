@@ -34,7 +34,7 @@ class Memory:
     # Write a byte to memory given an address
     def write(self, address, data):
         if address < 0 or address > 255:
-            raise Exception("Invalid memory address")
+            raise Exception("Invalid memory address: " + str(address))
         if len(hex(data)) > 4:
             raise Exception("Invalid data size")
         self.memory[address // 16][address % 16] = data

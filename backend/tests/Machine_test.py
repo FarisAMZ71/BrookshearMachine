@@ -2,9 +2,9 @@ import os
 import sys
 import pytest # type: ignore
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from models.Machine import Machine
-from models.cpu_module import CPU
-from models.memory_module import Memory
+from models.Base_Brookshear.Machine import Machine
+from models.Base_Brookshear.cpu_module import CPU
+from models.Base_Brookshear.memory_module import Memory
 
 class TestMachine:
     @pytest.fixture(autouse=True)

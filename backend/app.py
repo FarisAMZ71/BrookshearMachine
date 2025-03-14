@@ -8,9 +8,14 @@ from services.Utils import Utils
 
 app = Flask(__name__)
 CORS(app)  
-
-machine = Machine(CPU.new(), Memory.new())
-# machine.memory.import_program("fibonacci.txt")
+# Choose machine mode
+# machine_mode = "Base_Brookshear"
+# if machine_mode == "Base_Brookshear":
+#     machine = Machine(CPU.new(), Memory.new(), Assembler())
+# elif machine_mode == "Mode1_Stack":
+#     machine = Machine_Stack(CPU_Stack.new(), Memory_Stack.new(), Assembler_Stack())
+machine = Machine_Stack(CPU_Stack.new(), Memory_Stack.new(), Assembler_Stack())
+    
 utils = Utils()
 
 

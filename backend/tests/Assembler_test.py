@@ -2,7 +2,7 @@ import os
 import sys
 import pytest # type: ignore
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from models.Assembler import Assembler
+from models.Base_Brookshear.Assembler import Assembler
 
 def test_assembler_initialization():
     """Test that the Assembler initializes with empty assembly and machine code."""
