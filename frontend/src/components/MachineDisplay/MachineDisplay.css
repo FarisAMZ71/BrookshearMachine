@@ -26,6 +26,12 @@
     width: 50%; /* Take half the width of the page */
   }
 
+  .memory-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
   .assembler-container {
     background-color: #ffffff;
     border: 1px solid #ccc;
@@ -49,7 +55,7 @@
     min-width: 20rem;
   }
 
-  .memory-display {
+  .memory-display .stack-display {
     font-family: monospace;
     background-color: #ffffff;
     border: 1px solid #ccc;
@@ -72,6 +78,7 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     background-color: #f4f4f4;
+    font-family: monospace;
     font-size: 14px;
     color: #333;
   }
@@ -127,6 +134,8 @@
   }
   
   h2 {
+    font-family: monospace;
+    font-size: 1.2rem;
     text-align: center;
     color: #666;
   }

@@ -3,6 +3,7 @@ import React, { useState, useEffect, Component } from 'react';
 import MemoryDisplay from '../MemoryDisplay/MemoryDisplay';
 import RegisterDisplay from '../RegisterDisplay/RegisterDisplay';
 import AssemblyDisplay from '../AssemblyDisplay/AssemblyDisplay';
+import StackDisplay from '../StackDisplay/StackDisplay';
 // import '../MemoryDisplay/MemoryDisplay.css';
 // import '../RegisterDisplay/RegisterDisplay.css';
 import './MachineDisplay.css';
@@ -299,11 +300,13 @@ class MachineDisplay extends Component {
               assemblyCode={this.state.assemblyCode}
               machineCode={this.state.machineCode}
               onAssemblyCodeGenerated={this.setAssemblyCodeState}
-              // onMachineCodeGenerated={this.setMachineCodeState}
               onConvertClick={this.handleConvertClick}
               onLoadClick={this.handleLoadClick}/>
           </div>
-          <MemoryDisplay memory={memory} />
+          <div className="memory-container">
+            <StackDisplay stack={memory} stackPointer={registers[15]} />
+            <MemoryDisplay memory={memory} />
+          </div>
         </div>
       </div>
     );

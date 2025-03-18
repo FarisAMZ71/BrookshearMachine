@@ -1,0 +1,33 @@
+.stack-display {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.stack-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.stack-cell {
+    display: flex;
+    justify-content: center;
+    padding: 5px 7px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f4f4f4;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.stack-pointer {
+    font-weight: bold;
+    color: #333;
+}
+
+.stack-value {
+    font-family: monospace;
+    color: #333;
+}
