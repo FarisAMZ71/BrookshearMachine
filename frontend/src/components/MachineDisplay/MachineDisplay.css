@@ -71,7 +71,7 @@
     gap: 10px;
   }
   
-  .register-cell, .memory-cell {
+  .register-cell, .memory-cell, .stack-pointer-cell{
     display: flex;
     justify-content: space-between;
     padding: 5px 10px;
@@ -81,6 +81,7 @@
     font-family: monospace;
     font-size: 14px;
     color: #333;
+    gap: 9px;
   }
 
   .button-container {

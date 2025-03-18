@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MachineDisplay from './components/MachineDisplay/MachineDisplay';
+import Navbar from './components/Navbar/Navbar';
 import axios from 'axios';
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
 
   return (
     <div className="app-header">
-      <h1>Backend connection check</h1>
+      <Navbar/>
       <p>{testCon ? testCon : "Loading..."}</p>
       <MachineDisplay/>
     </div>
