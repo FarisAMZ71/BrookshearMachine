@@ -55,8 +55,8 @@ class Machine_Stack(Machine):
             case 0xC:
                 self.halted = True
             case 0xD:
-                self.memory.write(self.cpu.stack_pointer, self.cpu.registers[operation["operand1"]])
                 self.cpu.push()
+                self.memory.write(self.cpu.stack_pointer, self.cpu.registers[operation["operand1"]])
             case 0xE:
                 self.cpu.registers[operation["operand1"]] = self.memory.read(self.cpu.stack_pointer)
                 self.memory.write(self.cpu.stack_pointer, 0x00)

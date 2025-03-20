@@ -47,7 +47,7 @@ nav {
   nav .start-home, a:nth-child(1):hover~.animation {
     width: 100px;
     left: 0;
-    background-color: #1abc9c;
+    background-color: #007bff;
   }
   nav .start-about, a:nth-child(2):hover~.animation {
     width: 110px;

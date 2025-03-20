@@ -38,6 +38,7 @@ link registers + stacks
 paging
 instruction extending
 
+push multiple registers in one instruction
 
 (branch and link+ exchange)
 run speed 

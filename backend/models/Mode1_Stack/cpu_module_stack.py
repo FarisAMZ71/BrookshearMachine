@@ -13,17 +13,18 @@ class CPU_Stack(CPU):
     
     def push(self):
         if self.push_count == 0:
+            self.push_count += 1
             return
         self.stack_pointer -= 1
         self.push_count += 1
+        self.dump()
 
     def pop(self):
-        if self.pop_count == 0:
-            return
+        if self.pop_count > self.push_count:
+            raise Exception("Stack underflow")
         self.stack_pointer += 1
-        self.pop_count -= 1
+        self.pop_count += 1
         
-
     def dump(self):
         print("Registers: ", self.registers)
         print("Stack Pointer: ", self.stack_pointer)
