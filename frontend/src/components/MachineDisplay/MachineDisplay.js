@@ -12,9 +12,12 @@ import axios from 'axios';
 class MachineDisplay extends Component {
   constructor(props) {
     super(props);
+    // Machine modes: Base, Stack, or ...?
     this.state = {
+      machine_mode: 'Base',
       program_counter: 0,
       instruction_register: 0,
+      stack_pointer: 255,
       registers: Array(16).fill(0), 
       memory: Array(256).fill(0),
       assemblyCode: '',
@@ -53,7 +56,10 @@ class MachineDisplay extends Component {
           registers: response.data.cpu.registers,
           program_counter: response.data.cpu.program_counter,
           instruction_register: response.data.cpu.instruction_register
-        });        
+        });    
+        if (this.machine_mode === 'Stack') {
+          this.setState({ stack_pointer: response.data.cpu.stack_pointer });
+        }
       })
       .catch((error) => console.error('Error fetching registers:', error));
   }
@@ -80,6 +86,9 @@ class MachineDisplay extends Component {
           program_counter: data.cpu.program_counter || this.state.program_counter,
           instruction_register: data.cpu.instruction_register || this.state.instruction_register
         });
+        if (this.machine_mode === 'Stack') {
+          this.setState({ stack_pointer: data.cpu.stack_pointer });
+        }
       })
       .catch(error => {
         console.error("There was a problem with the fetch operation:", error);
@@ -108,6 +117,9 @@ class MachineDisplay extends Component {
           program_counter: data.cpu.program_counter || this.state.program_counter,
           instruction_register: data.cpu.instruction_register || this.state.instruction_register
         });
+        if (this.machine_mode === 'Stack') {
+          this.setState({ stack_pointer: data.cpu.stack_pointer });
+        }
       })
       .catch(error => {
         console.error("There was a problem with the fetch operation:", error);
@@ -304,7 +316,7 @@ class MachineDisplay extends Component {
               onLoadClick={this.handleLoadClick}/>
           </div>
           <div className="memory-container">
-            <StackDisplay stack={memory} stackPointer={registers[15]} />
+            <StackDisplay stack={memory} stackPointer={this.state.stack_pointer} />
             <MemoryDisplay memory={memory} />
           </div>
         </div>

@@ -9,10 +9,10 @@ from services.Utils import Utils
 app = Flask(__name__)
 CORS(app)  
 # Choose machine mode
-# machine_mode = "Base_Brookshear"
-# if machine_mode == "Base_Brookshear":
+machine_mode = "Base"
+# if machine_mode == "Base":
 #     machine = Machine(CPU.new(), Memory.new(), Assembler())
-# elif machine_mode == "Mode1_Stack":
+# elif machine_mode == "Stack":
 #     machine = Machine_Stack(CPU_Stack.new(), Memory_Stack.new(), Assembler_Stack())
 machine = Machine_Stack(CPU_Stack.new(), Memory_Stack.new(), Assembler_Stack())
     
@@ -35,50 +35,56 @@ def get_memory():
 
 @app.route('/api/cpu', methods=['GET'])
 def get_cpu():
-    return jsonify(
-        {"cpu":{
+    ret = {
+        "cpu":{
             "registers": machine.cpu.registers,
             "instruction_register": machine.cpu.instruction_register,
             "program_counter": machine.cpu.program_counter
         }}
-    )
+    if machine_mode == "Stack":
+        ret["cpu"]["stack_pointer"] = machine.cpu.stack_pointer
+    return jsonify(ret)
 
 @app.route('/api/run', methods=['POST'])
 def run_machine():
     try:
         machine.Run()
-    except Exception as e:
-        return jsonify({
-            "success": False,
-            "error": str(e)
-            }), 400
-    return jsonify(
-        {"memory": machine.memory.memory,
+        ret = {
+         "memory": machine.memory.memory,
          "cpu":{
             "registers": machine.cpu.registers,
             "instruction_register": int(machine.cpu.instruction_register[2:], 16),
             "program_counter": machine.cpu.program_counter
         }}
-    )
+        if machine_mode == "Stack":
+            ret["cpu"]["stack_pointer"] = machine.cpu.stack_pointer
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+            }), 400
+    return jsonify(ret)
 
 @app.route('/api/step', methods=['POST'])
 def step_machine():
     try:
         machine.Step()
+        ret = {
+         "memory": machine.memory.memory,
+         "cpu":{
+            "registers": machine.cpu.registers,
+            "instruction_register": int(machine.cpu.instruction_register[2:], 16),
+            "program_counter": machine.cpu.program_counter
+        }}
+        if machine_mode == "Stack":
+            ret["cpu"]["stack_pointer"] = machine.cpu.stack_pointer
         print(machine.cpu.instruction_register[2:])
     except Exception as e:
         return jsonify({
             "success": False,
             "error": str(e)
             }), 400
-    return jsonify(
-        {"memory": machine.memory.memory,
-         "cpu":{
-            "registers": machine.cpu.registers,
-            "instruction_register": int(machine.cpu.instruction_register[2:], 16),
-            "program_counter": machine.cpu.program_counter
-        }}
-    )
+    return jsonify(ret)
 
 @app.route('/api/clear_memory', methods=['POST'])
 def clear_memory():
