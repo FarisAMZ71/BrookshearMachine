@@ -17,7 +17,7 @@ PSH 0, 00
 POP 1, 00
 
 add  save and load
-live machineCode generation
+live machine_code generation
 
 what command could be in the assembler 
 which can be assembled into more than one brookshear instructin eg sub, mul

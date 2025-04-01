@@ -14,8 +14,8 @@ class Machine:
         self.utils = Utils()
         self.halted = False
 
-    def Assemble(self, assemblyCode: str):
-        return self.assembler.assemble(assemblyCode)
+    def Assemble(self, assembly_code: str):
+        return self.assembler.assemble(assembly_code)
     
     # Fetch the instruction from memory (2 bytes)
     def Fetch(self):
@@ -42,7 +42,6 @@ class Machine:
     
     # Execute the instruction
     def Execute(self, operation: dict):
-        print("in normal execute")
         match operation["opcode"]:
                            
             case 0x1:
@@ -97,8 +96,8 @@ class Machine:
             self.Fetch()
             operation = self.Decode()
             self.Execute(operation)
-            self.cpu.dump()
-            self.memory.dump()
+            # self.cpu.dump()
+            # self.memory.dump()
 
     
     def clearMemory(self):

@@ -9,16 +9,16 @@ class AssemblyDisplay extends Component {
   }
 
   render() {
-    const { assemblyCode, machineCode, onAssemblyCodeGenerated, onConvertClick, onLoadClick } = this.props;
+    const { assembly_code, machine_code, onassembly_codeGenerated, onConvertClick, onLoadClick } = this.props;
 
     return (
       <div className="assembler-container">
         <h2>Assembler</h2>
         <textarea
           className="assembly-input"
-          value={assemblyCode} 
+          value={assembly_code} 
           placeholder="Enter assembly code here..."
-          onChange={onAssemblyCodeGenerated}
+          onChange={onassembly_codeGenerated}
         />
         <div className="button-container">
           <ConvertButton onClick={onConvertClick}/>
@@ -26,7 +26,7 @@ class AssemblyDisplay extends Component {
         </div>
         <div className="machine-code-display">
           <h3>Machine Code</h3>
-          <pre>{machineCode || 'No output yet'}</pre>
+          <pre>{machine_code || 'No output yet'}</pre>
         </div>
       </div>
     );

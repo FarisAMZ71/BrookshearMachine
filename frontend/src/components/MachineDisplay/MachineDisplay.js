@@ -14,19 +14,17 @@ class MachineDisplay extends Component {
     super(props);
     // Machine modes: Base, Stack, or ...?
     this.state = {
-      machine_mode: 'Base',
       program_counter: 0,
       instruction_register: 0,
       stack_pointer: 255,
       registers: Array(16).fill(0), 
       memory: Array(256).fill(0),
-      assemblyCode: '',
-      machineCode: '',
-      memoryContents: '' 
+      assembly_code: '',
+      machine_code: '',
+      memory_contents: '' 
     };
 
-    this.getMemoryData();
-    this.getRegistersData();
+    this.setup()
     
     this.handleRunClick = this.handleRunClick.bind(this);
     this.handleStepClick = this.handleStepClick.bind(this);
@@ -40,6 +38,12 @@ class MachineDisplay extends Component {
     this.handleFileUpload = this.handleFileUpload.bind(this);
   }
 
+  setup() {
+    this.getMemoryData();
+    this.getRegistersData();
+    this.getMachineMode();
+  }
+
   getMemoryData() {
     axios.get('/api/memory')
       .then((response) => {
@@ -51,17 +55,24 @@ class MachineDisplay extends Component {
   getRegistersData() {
     axios.get('/api/cpu')
       .then((response) => {
-        console.log(response.data.cpu);
         this.setState({
           registers: response.data.cpu.registers,
           program_counter: response.data.cpu.program_counter,
           instruction_register: response.data.cpu.instruction_register
         });    
-        if (this.machine_mode === 'Stack') {
+        if (this.props.machine_mode === 'Stack') {
           this.setState({ stack_pointer: response.data.cpu.stack_pointer });
         }
       })
       .catch((error) => console.error('Error fetching registers:', error));
+  }
+
+  getMachineMode() {
+    axios.get('/api/machine_mode')
+      .then((response) => {
+        this.props.updateMachineMode(response.data.machine_mode);
+      })
+      .catch((error) => console.error('Error fetching machine mode:', error));
   }
 
   // Function to handle the "Run" button click, updates both registers and memory
@@ -80,13 +91,14 @@ class MachineDisplay extends Component {
         return response.json();
       })
       .then(data => {
+        console.log(data);
         this.setState({
           memory: data.memory.flat(1) || this.state.memory,           
           registers: data.cpu.registers || this.state.registers ,
           program_counter: data.cpu.program_counter || this.state.program_counter,
           instruction_register: data.cpu.instruction_register || this.state.instruction_register
         });
-        if (this.machine_mode === 'Stack') {
+        if (this.props.machine_mode === 'Stack') {
           this.setState({ stack_pointer: data.cpu.stack_pointer });
         }
       })
@@ -111,13 +123,14 @@ class MachineDisplay extends Component {
         return response.json();
       })
       .then(data => {
+        console.log(data);
         this.setState({
           memory: data.memory.flat(1) || this.state.memory,
           registers: data.cpu.registers || this.state.registers,
           program_counter: data.cpu.program_counter || this.state.program_counter,
           instruction_register: data.cpu.instruction_register || this.state.instruction_register
         });
-        if (this.machine_mode === 'Stack') {
+        if (this.props.machine_mode === 'Stack') {
           this.setState({ stack_pointer: data.cpu.stack_pointer });
         }
       })
@@ -180,83 +193,26 @@ class MachineDisplay extends Component {
   }
 
   // Function to handle the "Load" button click, updates machine code
-  setMachineCodeState(machineCode) {
-    this.setState({ machineCode });
+  setMachineCodeState(machine_code) {
+    this.setState({ machine_code });
   }
 
   // Function to update assembly code in class state
   setAssemblyCodeState(event) {
-    const assemblyCode = event.target.value;
-    this.setState({ assemblyCode });
+    const assembly_code = event.target.value;
+    this.setState({ assembly_code });
   }
 
   // Function to save memory contents to a file
   saveMemoryToFile() {
     const element = document.createElement('a');
-    this.state.memoryContents = this.state.assemblyCode;
-    const file = new Blob([this.state.memoryContents], { type: 'text/plain' });
+    this.state.memory_contents = this.state.assembly_code;
+    const file = new Blob([this.state.memory_contents], { type: 'text/plain' });
     element.href = URL.createObjectURL(file);
     element.download = 'program.txt';
     document.body.appendChild(element); 
     element.click();
     document.body.removeChild(element);
-  }
-
-  // Function to handle file upload
-  handleFileUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const fileContents = e.target.result;
-        this.setState({ memory: fileContents.split(' ') });
-        this.setState({ assemblyCode: fileContents });
-
-        // Send POST request to load the program into memory
-        fetch('/api/upload_program', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ program: fileContents })
-        })
-          .then(response => response.json())
-          .then(data => {
-            this.setState({ memory: data.memory.flat(1) || this.state.memory });
-          })
-          .catch(error => {
-            console.error("There was a problem with the fetch operation:", error);
-          });
-      };
-      reader.readAsText(file);
-    }
-  }
-
-  // Function to convert assembly code to machine code
-  handleConvertClick() {
-    // Make a POST request to the server
-    fetch('/api/convert', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ assemblyCode: this.state.assemblyCode })
-    })
-      .then(async response => {
-        if (!response.ok) {
-          const error = await response.json();
-          console.log(error);
-          throw new Error(error.error || 'Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        this.setState({ machineCode: data.machineCode });
-      })
-      .catch(error => {
-        console.error(error.message);
-        this.setState({ machineCode: 'Error converting code: ' + error.message });
-      });
   }
 
   // Function to handle the "Load" button click, updates both registers and memory
@@ -266,7 +222,7 @@ class MachineDisplay extends Component {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ machineCode: this.state.machineCode })
+      body: JSON.stringify({ machine_code: this.state.machine_code })
     })
       .then(response => {
         if (!response.ok) {
@@ -284,9 +240,65 @@ class MachineDisplay extends Component {
       });
   }
 
+    // Function to handle file upload
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const fileContents = e.target.result;
+          this.setState({ memory: fileContents.split(' ') });
+          this.setState({ assembly_code: fileContents });
+  
+          // Send POST request to load the program into memory
+          fetch('/api/upload_program', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ program: fileContents })
+          })
+            .then(response => response.json())
+            .then(data => {
+              this.setState({ memory: data.memory.flat(1) || this.state.memory });
+            })
+            .catch(error => {
+              console.error("There was a problem with the fetch operation:", error);
+            });
+        };
+        reader.readAsText(file);
+      }
+    }
+
+      // Function to convert assembly code to machine code
+  handleConvertClick(event) {
+    // Make a POST request to the server
+    fetch('/api/convert', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ assembly_code: this.state.assembly_code })
+    })
+      .then(async response => {
+        if (!response.ok) {
+          const error = await response.json();
+          console.log(error);
+          throw new Error(error.error || 'Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        this.setState({ machine_code: data.machine_code });
+      })
+      .catch(error => {
+        console.error(error.message);
+        this.setState({ machine_code: 'Error converting code: ' + error.message });
+      });
+  }
+
   render() {
     const { instruction_register, program_counter, registers, memory } = this.state;
-    
     return (
       <div className="machine-display">
         <h1>Register and Memory Display</h1>
@@ -309,15 +321,19 @@ class MachineDisplay extends Component {
               </label>
             </div>
             <AssemblyDisplay 
-              assemblyCode={this.state.assemblyCode}
-              machineCode={this.state.machineCode}
-              onAssemblyCodeGenerated={this.setAssemblyCodeState}
+              assembly_code={this.state.assembly_code}
+              machine_code={this.state.machine_code}
+              onassembly_codeGenerated={this.setAssemblyCodeState}
               onConvertClick={this.handleConvertClick}
               onLoadClick={this.handleLoadClick}/>
           </div>
           <div className="memory-container">
-            <StackDisplay stack={memory} stackPointer={this.state.stack_pointer} />
-            <MemoryDisplay memory={memory} />
+            <StackDisplay 
+            stack={memory.slice(this.state.stack_pointer)} 
+            stackPointer={this.state.stack_pointer} 
+            machine_mode={this.props.machine_mode}/>
+            <MemoryDisplay 
+            memory={memory} />
           </div>
         </div>
       </div>

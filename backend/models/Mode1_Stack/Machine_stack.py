@@ -18,7 +18,6 @@ class Machine_Stack(Machine):
 
     # Overriding the Execute method
     def Execute(self, operation: dict):
-        print("in stack execute")
         print(operation)
         match operation["opcode"]:
                            

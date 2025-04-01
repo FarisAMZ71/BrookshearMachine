@@ -10,11 +10,8 @@ app = Flask(__name__)
 CORS(app)  
 # Choose machine mode
 machine_mode = "Base"
-# if machine_mode == "Base":
-#     machine = Machine(CPU.new(), Memory.new(), Assembler())
-# elif machine_mode == "Stack":
-#     machine = Machine_Stack(CPU_Stack.new(), Memory_Stack.new(), Assembler_Stack())
-machine = Machine_Stack(CPU_Stack.new(), Memory_Stack.new(), Assembler_Stack())
+machine = Machine(CPU.new(), Memory.new(), Assembler())
+# machine = Machine_Stack(CPU_Stack.new(), Memory_Stack.new(), Assembler_Stack())
     
 utils = Utils()
 
@@ -45,6 +42,13 @@ def get_cpu():
         ret["cpu"]["stack_pointer"] = machine.cpu.stack_pointer
     return jsonify(ret)
 
+@app.route('/api/machine_mode', methods=['GET'])
+def get_machine_mode():
+    print(machine_mode)
+    return jsonify(
+        {"machine_mode": machine_mode}
+    )
+
 @app.route('/api/run', methods=['POST'])
 def run_machine():
     try:
@@ -63,6 +67,8 @@ def run_machine():
             "success": False,
             "error": str(e)
             }), 400
+    print("Machine Mode: ", machine_mode)
+    print("return json: ", ret)
     return jsonify(ret)
 
 @app.route('/api/step', methods=['POST'])
@@ -108,8 +114,8 @@ def clear_cpu():
 def load_program():
     # machine.memory.load_program("fibonacci.txt")
     # Extract machine code from the request
-    machineCode = request.json['machineCode']
-    machine.memory.load_program(machineCode)
+    machine_code = request.json['machine_code']
+    machine.memory.load_program(machine_code)
     return jsonify(
         {"memory": machine.memory.memory}
     )
@@ -119,8 +125,8 @@ def upload_program():
     try:
         program = request.json['program']
         print(program)
-        machineCode = machine.Assemble(program)
-        machine.memory.load_program(machineCode)
+        machine_code = machine.Assemble(program)
+        machine.memory.load_program(machine_code)
     except Exception as e:
         print(e)
         return jsonify({
@@ -130,20 +136,20 @@ def upload_program():
     return jsonify(
         {
             "memory": machine.memory.memory,
-            "assemblyCode": machine.assembler.assemblyCode
+            "assembly_code": machine.assembler.assembly_code
         }
     )
 
 @app.route('/api/convert', methods=['POST'])
-# Extract the assemblyCode from the request
+# Extract the assembly_code from the request
 def convert():
-    assemblyCode = request.json['assemblyCode']
+    assembly_code = request.json['assembly_code']
     try:
-        machineCode = machine.Assemble(assemblyCode)
-        machine.assembler.assemblyCode = assemblyCode
-        machine.assembler.machineCode = machineCode
-        print(machine.assembler.assemblyCode)
-        print(machine.assembler.machineCode)
+        machine_code = machine.Assemble(assembly_code)
+        machine.assembler.assembly_code = assembly_code
+        machine.assembler.machine_code = machine_code
+        print(machine.assembler.assembly_code)
+        print(machine.assembler.machine_code)
     except Exception as e:
         return jsonify({
             "success": False,
@@ -152,7 +158,29 @@ def convert():
     
     return jsonify({
         "success": True,
-        "machineCode": machineCode
+        "machine_code": machine_code
+        }), 200
+
+@app.route('/api/change_mode', methods=['POST'])
+def change_mode():
+    global machine
+    global machine_mode
+    mode = request.json['machine_mode']
+    print(mode)
+    if mode == "Base":
+        machine = Machine(CPU.new(), Memory.new(), Assembler())
+    elif mode == "Stack":
+        machine = Machine_Stack(CPU_Stack.new(), Memory_Stack.new(), Assembler_Stack())
+    else:
+        return jsonify({
+            "success": False,
+            "error": "Invalid mode"
+            }), 400
+    machine_mode = mode
+    print(machine_mode)
+    return jsonify({
+        "success": True,
+        "mode": mode
         }), 200
 
 

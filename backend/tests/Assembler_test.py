@@ -7,8 +7,8 @@ from models.Base_Brookshear.Assembler import Assembler
 def test_assembler_initialization():
     """Test that the Assembler initializes with empty assembly and machine code."""
     asm = Assembler()
-    assert asm.assemblyCode == ""
-    assert asm.machineCode == ""
+    assert asm.assembly_code == ""
+    assert asm.machine_code == ""
 
 def test_clean():
     """Test that cleaning removes comments, labels, and whitespace."""

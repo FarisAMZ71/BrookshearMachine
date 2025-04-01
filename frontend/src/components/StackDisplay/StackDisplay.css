@@ -1,7 +1,11 @@
-.stack-display {
+.stack-display.show {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
+}
+
+.stack-display.hidden {
+    display: none;
 }
 
 .stack-grid {
