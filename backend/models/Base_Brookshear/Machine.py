@@ -70,7 +70,7 @@ class Machine:
                 self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] ^ self.cpu.registers[operation["operand3"]]
             case 0xA:
                 self.cpu.registers[operation["operand1"]] = self.utils.bit_cycle_right(self.cpu.registers[operation["operand1"]], operation["operand3"]) 
-            case 0xB:
+            case 0xB:   
                 if(self.cpu.registers[0] == self.cpu.registers[operation["operand1"]]):
                     address = operation["operand2"] * 16 + operation["operand3"]
                     self.cpu.set_program_counter(address)

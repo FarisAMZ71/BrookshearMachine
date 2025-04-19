@@ -22,6 +22,8 @@ class CPU_Stack(CPU):
     def pop(self):
         if self.pop_count > self.push_count:
             raise Exception("Stack underflow")
+        if self.stack_pointer == 0xFF:
+            return
         self.stack_pointer += 1
         self.pop_count += 1
         
@@ -30,6 +32,8 @@ class CPU_Stack(CPU):
         print("Stack Pointer: ", self.stack_pointer)
         print("Program Counter: ", self.program_counter)
         print("Instruction Register: ", self.instruction_register)
+        print("Push Count: ", self.push_count)
+        print("Pop Count: ", self.pop_count)
         print("\n")
 
     def clear(self):
@@ -38,3 +42,4 @@ class CPU_Stack(CPU):
         self.program_counter = 0
         self.instruction_register = "0"
         self.push_count = 0
+        self.pop_count = 0

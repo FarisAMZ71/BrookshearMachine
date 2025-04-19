@@ -14,8 +14,14 @@ HLT 0, 00
 
 LDR 0, 10
 PSH 0, 00
+PSH 0, 00
+PSH 0, 00
+PSH 0, 00
 POP 1, 00
-
+POP 1, 00
+POP 1, 00
+POP 1, 00
+HLT 0, 00
 add  save and load
 live machine_code generation
 
