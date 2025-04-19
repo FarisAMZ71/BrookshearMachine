@@ -46,32 +46,32 @@ class Machine:
                            
             case 0x1:
                 address = operation["operand2"] * 16 + operation["operand3"]
-                self.cpu.registers[operation["operand1"]] = self.memory.read(address)
+                self.cpu.write(operation["operand1"], self.memory.read(address))
             case 0x2:
                 bit_string = operation["operand2"] * 16 + operation["operand3"]
-                self.cpu.registers[operation["operand1"]] = bit_string
+                self.cpu.write(operation["operand1"], bit_string)
             case 0x3:
                 address = operation["operand2"] * 16 + operation["operand3"]
-                self.memory.write(address, self.cpu.registers[operation["operand1"]])
+                self.memory.write(address, self.cpu.read(operation["operand1"]))
             case 0x4:
-                self.cpu.registers[operation["operand3"]] = self.cpu.registers[operation["operand2"]]  
+                self.cpu.write(operation["operand3"], self.cpu.read(operation["operand2"]))
             case 0x5:
-                self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] + self.cpu.registers[operation["operand3"]]
+                self.cpu.write(operation["operand1"], self.cpu.read(operation["operand2"]) + self.cpu.read(operation["operand3"]))
             case 0x6:
-                self.cpu.registers[operation["operand1"]] = self.utils.encode_to_8bit_floating_point(
-                    self.utils.decode_8bit_floating_point(self.cpu.registers[operation["operand2"]]) + 
-                    self.utils.decode_8bit_floating_point(self.cpu.registers[operation["operand3"]])
-                    )
+                self.cpu.write(operation["operand1"], self.utils.encode_to_8bit_floating_point(
+                    self.utils.decode_8bit_floating_point(self.cpu.read(operation["operand2"])) + 
+                    self.utils.decode_8bit_floating_point(self.cpu.read(operation["operand3"]))
+                    ))
             case 0x7:
-                self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] | self.cpu.registers[operation["operand3"]] 
+                self.cpu.write(operation["operand1"], self.cpu.read(operation["operand2"]) | self.cpu.read(operation["operand3"]))
             case 0x8:
-                self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] & self.cpu.registers[operation["operand3"]]
+                self.cpu.write(operation["operand1"], self.cpu.read(operation["operand2"]) & self.cpu.read(operation["operand3"]))
             case 0x9:
-                self.cpu.registers[operation["operand1"]] = self.cpu.registers[operation["operand2"]] ^ self.cpu.registers[operation["operand3"]]
+                self.cpu.write(operation["operand1"], self.cpu.read(operation["operand2"]) ^ self.cpu.read(operation["operand3"]))
             case 0xA:
-                self.cpu.registers[operation["operand1"]] = self.utils.bit_cycle_right(self.cpu.registers[operation["operand1"]], operation["operand3"]) 
+                self.cpu.write(operation["operand1"], self.utils.bit_cycle_right(self.cpu.read(operation["operand1"]), operation["operand3"]))
             case 0xB:   
-                if(self.cpu.registers[0] == self.cpu.registers[operation["operand1"]]):
+                if self.cpu.read(0) == self.cpu.read(operation["operand1"]):
                     address = operation["operand2"] * 16 + operation["operand3"]
                     self.cpu.set_program_counter(address)
             case 0xC:

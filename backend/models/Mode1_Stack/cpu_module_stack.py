@@ -17,7 +17,6 @@ class CPU_Stack(CPU):
             return
         self.stack_pointer -= 1
         self.push_count += 1
-        self.dump()
 
     def pop(self):
         if self.pop_count > self.push_count:
@@ -26,6 +25,9 @@ class CPU_Stack(CPU):
             return
         self.stack_pointer += 1
         self.pop_count += 1
+
+    def stack_size(self):
+        return self.push_count - self.pop_count
         
     def dump(self):
         print("Registers: ", self.registers)

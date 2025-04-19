@@ -5,6 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.Base_Brookshear.Machine import Machine
 from models.Base_Brookshear.cpu_module import CPU
 from models.Base_Brookshear.memory_module import Memory
+from models.Base_Brookshear.Assembler import Assembler
 
 class TestMachine:
     @pytest.fixture(autouse=True)
@@ -12,13 +13,15 @@ class TestMachine:
         self.memory = Memory.new()
         self.memory.import_program("fibonacci.txt")
         self.cpu = CPU.new()
-        self.machine = Machine(self.cpu, self.memory)
+        self.assembler = Assembler()
+        self.machine = Machine(self.cpu, self.memory, self.assembler)
     
     def reset(self):
         self.memory = Memory.new()
         self.memory.import_program("fibonacci.txt")
         self.cpu = CPU.new()
-        self.machine = Machine(self.cpu, self.memory)
+        self.assembler = Assembler()
+        self.machine = Machine(self.cpu, self.memory, self.assembler)
 
     def test_fetch(self):
         self.machine.Fetch()

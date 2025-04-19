@@ -14,6 +14,19 @@ class CPU:
     def new(cls):
         return cls([0] * 16, 0, "0")
     
+    def read(self, index):
+        if index < 0 or index >= len(self.registers):
+            raise Exception("Invalid register index")
+        return self.registers[index]
+    
+    def write(self, index, value):
+        if index < 0 or index >= len(self.registers):
+            raise Exception("Invalid register index")
+        if value < 0 or value > 255:
+            raise Exception("Invalid register value")
+        self.registers[index] = value
+        return self.registers[index]
+    
     def increment_program_counter(self):
         if self.program_counter == 255:
             self.program_counter = 0
