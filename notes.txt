@@ -22,6 +22,16 @@ POP 1, 00
 POP 1, 00
 POP 1, 00
 HLT 0, 00
+
+START:
+  LDR 1, 10
+  LDR 2, 20
+  CAL FUNC_ADD
+  HLT 0, 00
+FUNC_ADD:
+  ADT 3, 12
+  POP 0, 00
+  
 add  save and load
 live machine_code generation
 

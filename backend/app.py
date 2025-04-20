@@ -92,6 +92,7 @@ def step_machine():
             ret["cpu"]["link_register"] = machine.cpu.link_register
         print(machine.cpu.instruction_register[2:])
     except Exception as e:
+        print(e)
         return jsonify({
             "success": False,
             "error": str(e)

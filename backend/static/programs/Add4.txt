@@ -1,0 +1,27 @@
+// --- Main Section ---
+START:
+  LDR 0, 01
+  LDR 1, 02
+  LDR 2, 03
+  LDR 3, 04
+  PSH 3, 01
+  CAL FUNC_ADD4
+  POP 3, 01
+  LDR 4, 00
+  MOV 0, 04
+  HLT 0, 00
+
+
+// --- Function Section ---
+FUNC_ADD4:
+  POP 6, 01
+  PSH 5, 01
+  LDR 5, 00
+  ADT 5, 05
+  ADT 5, 15
+  ADT 5, 25
+  ADT 5, 65
+  LDR 0, 00
+  MOV 0, 50
+  POP 5, 01
+  POP 0, 00

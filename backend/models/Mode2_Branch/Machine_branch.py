@@ -18,14 +18,20 @@ class Machine_Branch(Machine_Stack):
 
     # Overriding the Execute method
     def Execute(self, operation: dict):
+        print("in branch execute")
+        print(f"Operation: {operation}")
+        print(f"PC: {self.cpu.program_counter}")
+        print(f"Registers: {self.cpu.link_register}")
         match operation["opcode"]:
             case 0xE:
+                print("in E")
                 if operation["operand1"] == 0x0 and operation["operand2"] == 0x0 and operation["operand3"] == 0x0:
-                    self.program_counter = self.cpu.link_register
+                    print("in E 0")
+                    self.cpu.program_counter = self.cpu.link_register
                 else:
                     super().Execute(operation)
             case 0xF:
-                self.cpu.link_register = self.cpu.program_counter + 2
+                self.cpu.link_register = self.cpu.program_counter
                 self.cpu.program_counter = operation["operand2"] * 16 + operation["operand3"]
             case _:
                 super().Execute(operation)

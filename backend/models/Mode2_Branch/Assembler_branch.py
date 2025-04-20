@@ -29,15 +29,18 @@ class Assembler_Branch(Assembler_Stack):
         label_table = {}
         current_address = 0
 
-        # First pass: build label table
+        # First pass: build label table with corrected byte size
         for line in cleaned_code:
-            print("line:", line)
             if ':' in line:
                 label = line.split(':')[0].strip()
                 label_table[label] = current_address
             else:
-                current_address += 1 if line.startswith("CAL") else 2
-        print("Label table:", label_table)
+                mnemonic = line.split(" ")[0]
+                if mnemonic == "CAL" or mnemonic == "HLT":
+                    current_address += 2  # 2 bytes for CAL and HLT
+                else:
+                    current_address += 2  # all other instructions are 2 bytes
+
         # Second pass: generate machine code
         current_address = 0
         for i, line in enumerate(cleaned_code):
@@ -47,9 +50,6 @@ class Assembler_Branch(Assembler_Stack):
             parts = line.strip().split(" ", 1)
             mnemonic = parts[0]
             operands = parts[1] if len(parts) > 1 else ""
-            print("mnemonic:", mnemonic)
-            print("operands:", operands)
-            print("parts:", parts)
 
             if mnemonic not in self.instruction_map:
                 raise Exception(f"Invalid instruction '{mnemonic}' on line {i+1}")
@@ -58,15 +58,16 @@ class Assembler_Branch(Assembler_Stack):
 
             if mnemonic == "HLT":
                 machine_code[current_address] = opcode + "0"
-                current_address += 1
+                machine_code[current_address + 1] = "00"
+                current_address += 2
             elif mnemonic == "CAL":
-                # Operand is a label pointing to the function
                 target = operands.strip()
                 if target not in label_table:
                     raise Exception(f"Undefined label '{target}' on line {i+1}")
                 address = label_table[target]
-                machine_code[current_address] = opcode + "{:02x}".format(address)
-                current_address += 1
+                machine_code[current_address] = opcode + "0"
+                machine_code[current_address + 1] = "{:02x}".format(address)
+                current_address += 2
             else:
                 regs = operands.split(",")
                 if len(regs) != 2:
@@ -83,7 +84,5 @@ class Assembler_Branch(Assembler_Stack):
                 machine_code[current_address + 1] = "{:02x}".format(int(val, 16)).lower()
                 current_address += 2
 
-        # Join all used addresses
         self.machine_code = " ".join(machine_code[:current_address]).strip()
         return self.machine_code
-

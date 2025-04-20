@@ -6,7 +6,7 @@ class StackDisplay extends Component {
     const { stack, stackPointer, machine_mode } = this.props;
     // console.log("StackPointer: ", stackPointer);
     return (
-      <div className={`stack-display ${machine_mode === "Stack" ? "show" : "hidden"}`}>
+      <div className={`stack-display ${(machine_mode === "Stack" || machine_mode === "Branch") ? "show" : "hidden"}`}>
         <h2>Stack</h2>
         <div className="stack-grid">
             <div className="stack-pointer-cell">
