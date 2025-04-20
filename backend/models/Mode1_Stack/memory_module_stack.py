@@ -7,6 +7,3 @@ class Memory_Stack(Memory):
     @staticmethod
     def new():
         return Memory_Stack([[0] * 16 for _ in range(16)])
-    
-    def clear(self):
-        self.memory = [[0] * 16 for _ in range(16)]

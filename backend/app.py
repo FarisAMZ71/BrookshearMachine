@@ -40,6 +40,8 @@ def get_cpu():
         }}
     if machine_mode == "Stack":
         ret["cpu"]["stack_pointer"] = machine.cpu.stack_pointer
+    if machine_mode == "Branch":
+        ret["cpu"]["link_register"] = machine.cpu.link_register
     return jsonify(ret)
 
 @app.route('/api/machine_mode', methods=['GET'])
@@ -62,6 +64,8 @@ def run_machine():
         }}
         if machine_mode == "Stack":
             ret["cpu"]["stack_pointer"] = machine.cpu.stack_pointer
+        if machine_mode == "Branch":
+            ret["cpu"]["link_register"] = machine.cpu.link_register
     except Exception as e:
         return jsonify({
             "success": False,
@@ -84,6 +88,8 @@ def step_machine():
         }}
         if machine_mode == "Stack":
             ret["cpu"]["stack_pointer"] = machine.cpu.stack_pointer
+        if machine_mode == "Branch":
+            ret["cpu"]["link_register"] = machine.cpu.link_register
         print(machine.cpu.instruction_register[2:])
     except Exception as e:
         return jsonify({
@@ -171,6 +177,8 @@ def change_mode():
         machine = Machine(CPU.new(), Memory.new(), Assembler())
     elif mode == "Stack":
         machine = Machine_Stack(CPU_Stack.new(), Memory_Stack.new(), Assembler_Stack())
+    elif mode == "Branch":
+        machine = Machine_Branch(CPU_Branch.new(), Memory_Branch.new(), Assembler_Branch())
     else:
         return jsonify({
             "success": False,

@@ -31,6 +31,7 @@ class Assembler:
         # Add the operands
             operands = line[4:].split(",")
             operands = [x.strip() for x in operands]
+
             if len(operands[1]) == 1:
                 operands[1] = "0" + operands[1]
             print(len(operands))
@@ -44,6 +45,7 @@ class Assembler:
             if(int(operands[1], 16) < 0 or int(operands[1], 16) > 255):
                 raise Exception(f"Invalid bit pattern in line {i+1}")
             machine_code += f"{str(operands[1]).lower()} "
+
         self.machine_code = machine_code
         return machine_code
     
@@ -56,8 +58,6 @@ class Assembler:
         lines = list(map(lambda x: x.split("//")[0], lines))
         # Remove the leading and trailing whitespaces
         lines = list(map(lambda x: x.strip(), lines))
-        # Remove the labels
-        lines = list(map(lambda x: x.split(":")[-1].strip(), lines))
         # Remove the empty list elements
         lines = list(filter(lambda x: x != "", lines))
         # Convert to uppercase

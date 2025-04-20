@@ -30,18 +30,13 @@ class CPU_Stack(CPU):
         return self.push_count - self.pop_count
         
     def dump(self):
-        print("Registers: ", self.registers)
-        print("Stack Pointer: ", self.stack_pointer)
-        print("Program Counter: ", self.program_counter)
+        super().dump()
         print("Instruction Register: ", self.instruction_register)
         print("Push Count: ", self.push_count)
         print("Pop Count: ", self.pop_count)
-        print("\n")
 
     def clear(self):
-        self.registers = [0] * 16
+        super().clear()
         self.stack_pointer = 0xFF
-        self.program_counter = 0
-        self.instruction_register = "0"
         self.push_count = 0
         self.pop_count = 0

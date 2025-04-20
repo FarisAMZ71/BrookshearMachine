@@ -28,7 +28,7 @@ class CPU:
         return self.registers[index]
     
     def increment_program_counter(self):
-        if self.program_counter == 255:
+        if self.program_counter >= 254:
             self.program_counter = 0
         else:
             self.program_counter += 2

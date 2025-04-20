@@ -20,7 +20,24 @@ Commands (from brookshear):
 A ROT r, 0y - rotate
 B JMP r, xy - jump
 C HLT 0, 00 - halt
-D PSH r, 00 - push stack
-E POP r, 00 - pop stack
+D PSH r, xy - push stack from r, xy elements
+E POP r, xy - pop stack from r, xy elements (POP 0, 00 pops LR TO PC)
+F CAL 0, xy - call function on address xy
+
+Mode Branch memory map:
++----------------------+ 0x00
+| Main program         | ← starts at address 0x00
+|                      |
+| ...                  |
+| CALL functionX       | ← when executed, jumps to function code
+| ...                  |
++----------------------+ <- function section (e.g., 0x80)
+| Function: functionX  |
+| ...                  |
+| POP PC               |
++----------------------+ <- stack grows upwards from here (e.g., 0xF0)
+| Stack(SP points here)|
++----------------------+ 0xFF
+
 
 
