@@ -71,7 +71,7 @@
     gap: 10px;
   }
   
-  .register-cell, .memory-cell, .stack-pointer-cell{
+  .register-cell, .memory-cell, .stack-pointer-cell {
     display: flex;
     justify-content: space-between;
     padding: 5px 10px;
@@ -82,6 +82,19 @@
     font-size: 14px;
     color: #333;
     gap: 9px;
+  }
+
+  .register-cell.highlight {
+    background-color: #0098D4; /* Light blue for highlighted registers */
+    color: #fff;
+  }
+  .memory-cell.highlight {
+    background-color: #0098D4; /* Light blue for highlighted memory cells */
+    color: #fff;
+  }
+  .memory-grid-cell.highlight {
+    background-color: #0098D4; /* Light blue for highlighted memory cells */
+    color: #fff;
   }
 
   .button-container {

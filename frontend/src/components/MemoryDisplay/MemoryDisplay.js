@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./MemoryDisplay.css";
 
-const MemoryDisplay = ({ memory }) => {
+const MemoryDisplay = ({ memory, program_counter }) => {
   const [viewMode, setViewMode] = useState("list"); // Toggle between List and Grid View
 
   const handleViewChange = (event) => {
@@ -11,9 +11,10 @@ const MemoryDisplay = ({ memory }) => {
   const renderListView = () => {
     return memory.map((value, address) => {
         const isRightColumn = address % 2 === 1; // Identifies 2nd column
-
+        console.log("Address: ", address);
+        console.log("Program Counter: ", program_counter);
         return (
-            <div key={address} className="memory-cell">
+            <div key={address} className={`memory-cell ${(address === program_counter || address == program_counter + 1) ? "highlight" : ""}`}>
                 {!isRightColumn && ( // First Column: Address on Left, Value on Right
                     <span className="memory-address">
                         0x{address.toString(16).padStart(2, "0").toUpperCase()}
@@ -41,7 +42,7 @@ const MemoryDisplay = ({ memory }) => {
       for (let col = 0; col < 16; col++) {
         const address = row * 16 + col;
         rowCells.push(
-          <td key={address} className="memory-grid-cell">
+          <td key={address} className={`memory-grid-cell ${(address === program_counter || address == program_counter + 1) ? "highlight" : ""}`}>
             {memory[address].toString(16).padStart(2, "0").toUpperCase()}
           </td>
         );

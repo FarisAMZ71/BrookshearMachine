@@ -19,7 +19,7 @@ class RegisterDisplay extends Component {
             <span className="register-address">IR</span>
             <span className="register-value">{instruction_register.toString(16).padStart(2, '0').toUpperCase()}</span>
           </div>
-          <div className="register-cell">
+          <div className="register-cell highlight">
             <span className="register-address">PC</span>
             <span className="register-value">{program_counter.toString(16).padStart(2, '0').toUpperCase()}</span>
           </div>

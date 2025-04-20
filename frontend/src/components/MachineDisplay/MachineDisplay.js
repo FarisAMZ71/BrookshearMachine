@@ -17,6 +17,7 @@ class MachineDisplay extends Component {
       program_counter: 0,
       instruction_register: 0,
       stack_pointer: 255,
+      link_register: 0,
       registers: Array(16).fill(0), 
       memory: Array(256).fill(0),
       assembly_code: '',
@@ -63,6 +64,9 @@ class MachineDisplay extends Component {
         if (this.props.machine_mode === 'Stack') {
           this.setState({ stack_pointer: response.data.cpu.stack_pointer });
         }
+        if (this.props.machine_mode === 'Branch') {
+          this.setState({ link_register: response.data.cpu.link_register });
+        }
       })
       .catch((error) => console.error('Error fetching registers:', error));
   }
@@ -101,6 +105,9 @@ class MachineDisplay extends Component {
         if (this.props.machine_mode === 'Stack') {
           this.setState({ stack_pointer: data.cpu.stack_pointer });
         }
+        if (this.props.machine_mode === 'Branch') {
+          this.setState({ link_register: response.data.cpu.link_register });
+        }
       })
       .catch(error => {
         console.error("There was a problem with the fetch operation:", error);
@@ -132,6 +139,9 @@ class MachineDisplay extends Component {
         });
         if (this.props.machine_mode === 'Stack') {
           this.setState({ stack_pointer: data.cpu.stack_pointer });
+        }
+        if (this.props.machine_mode === 'Branch') {
+          this.setState({ link_register: response.data.cpu.link_register });
         }
       })
       .catch(error => {
@@ -331,9 +341,11 @@ class MachineDisplay extends Component {
             <StackDisplay 
             stack={memory.slice(this.state.stack_pointer)} 
             stackPointer={this.state.stack_pointer} 
+            linkRegister={this.state.link_register}
             machine_mode={this.props.machine_mode}/>
             <MemoryDisplay 
-            memory={memory} />
+            memory={memory}
+            program_counter={this.state.program_counter} />
           </div>
         </div>
       </div>

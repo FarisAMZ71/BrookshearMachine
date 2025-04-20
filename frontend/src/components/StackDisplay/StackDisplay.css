@@ -8,6 +8,30 @@
     display: none;
 }
 
+.link-register-cell.show {
+    display: flex;
+    justify-content: center;
+    padding: 5px 7px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f4f4f4;
+    font-size: 0.9rem;
+    color: #333;
+    gap: 9px;
+}
+.link-register-cell.hidden {
+    display: none;
+}
+
+.link-register {
+    color: #333;
+}
+
+.link-register-value {
+    font-family: monospace;
+    color: #333;
+}
+
 .stack-grid {
     display: grid;
     grid-template-columns: 1fr;
