@@ -5,12 +5,12 @@ Steps to create new button:
 4- add function to component args
 5- bind button in constructor
 
-LDR 0, 10
-LDR 1, 20
-ADT 2, 01
-STR 2, 11
-LEA 3, 11
-HLT 0, 00
+LDR R0, 10
+LDR R1, 20
+ADT R2, R0, R1
+STR R2, 11
+LEA R3, 11
+HLT
 
 LDR 0, 10
 PSH 0, 00
@@ -27,10 +27,10 @@ START:
   LDR 1, 10
   LDR 2, 20
   CAL FUNC_ADD
-  HLT 0, 00
+  HLT 
 FUNC_ADD:
   ADT 3, 12
-  POP 0, 00
+  POP PC
   
 add  save and load
 live machine_code generation

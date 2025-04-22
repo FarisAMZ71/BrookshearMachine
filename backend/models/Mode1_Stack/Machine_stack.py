@@ -20,16 +20,12 @@ class Machine_Stack(Machine):
     def Execute(self, operation: dict):
         match operation["opcode"]:
                    
-            case 0xD:
-                for i in range(0, operation["operand2"] * 16 + operation["operand3"]):    
-                    self.cpu.push()
-                    self.memory.write(self.cpu.stack_pointer, self.cpu.read(operation["operand1"] + i))
+            case 0xD: 
+                self.cpu.push()
+                self.memory.write(self.cpu.stack_pointer, self.cpu.read(operation["operand1"]))
             case 0xE:
-                if operation["operand2"] * 16 + operation["operand3"] > self.cpu.stack_size():
-                    raise Exception("Stack underflow")
-                for i in range(0, operation["operand2"] * 16 + operation["operand3"]):
-                    self.cpu.write(operation["operand1"] + i, self.memory.read(self.cpu.stack_pointer))
-                    self.memory.write(self.cpu.stack_pointer, 0x00)
-                    self.cpu.pop()
+                self.cpu.write(operation["operand1"], self.memory.read(self.cpu.stack_pointer))
+                self.memory.write(self.cpu.stack_pointer, 0x00)
+                self.cpu.pop()
             case _:
                 super().Execute(operation)

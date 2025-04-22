@@ -14,7 +14,7 @@ const MemoryDisplay = ({ memory, program_counter }) => {
         console.log("Address: ", address);
         console.log("Program Counter: ", program_counter);
         return (
-            <div key={address} className={`memory-cell ${(address === program_counter || address == program_counter + 1) ? "highlight" : ""}`}>
+            <div key={address} className={`memory-cell ${address === program_counter? "highlight" : ""}`}>
                 {!isRightColumn && ( // First Column: Address on Left, Value on Right
                     <span className="memory-address">
                         0x{address.toString(16).padStart(2, "0").toUpperCase()}
@@ -42,7 +42,7 @@ const MemoryDisplay = ({ memory, program_counter }) => {
       for (let col = 0; col < 16; col++) {
         const address = row * 16 + col;
         rowCells.push(
-          <td key={address} className={`memory-grid-cell ${(address === program_counter || address == program_counter + 1) ? "highlight" : ""}`}>
+          <td key={address} className={`memory-grid-cell ${address === program_counter ? "highlight" : ""}`}>
             {memory[address].toString(16).padStart(2, "0").toUpperCase()}
           </td>
         );

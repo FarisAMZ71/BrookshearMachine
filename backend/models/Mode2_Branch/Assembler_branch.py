@@ -68,6 +68,11 @@ class Assembler_Branch(Assembler_Stack):
                 machine_code[current_address] = opcode + "0"
                 machine_code[current_address + 1] = "{:02x}".format(address)
                 current_address += 2
+            elif mnemonic == "POP" and operands.strip().upper() == "PC":
+                # Special case for POP PC: opcode E, operands 00
+                machine_code[current_address] = opcode + "0"
+                machine_code[current_address + 1] = "00"
+                current_address += 2
             else:
                 regs = operands.split(",")
                 if len(regs) != 2:

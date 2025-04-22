@@ -8,36 +8,23 @@ Command format:
 {Command} {Target register}, {Bit pattern}
 
 Commands (from brookshear):
-1 LEA r, xy - load effective address
-2 LDR r, xy - load register
-3 STR r, xy - store to memory
-4 MOV 0, xy - move value between registers
-5 ADT r, xy - add 2's complement
-6 ADF r, xy - add floating point
-7 ORR r, xy - or
-8 AND r, xy - and
-9 XOR r, xy - xor
-A ROT r, 0y - rotate
-B JMP r, xy - jump
+1 LEA Rr, xy - load effective address from memory location xy into register Rr
+2 LDR Rr, xy - load register with the bit pattern xy
+3 STR Rr, xy - store to memory location xy the contents of register Rr
+4 MOV Rr, Rs - move value from register Rs to register Rr
+5 ADT Rr, Rs, Rt - add 2's complement the contents of registers Rs and Rt and store the result in register Rr
+6 ADF Rr, Rs, Rt - add floating point the contents of registers Rs and Rt and store the result in register Rr
+7 ORR Rr, xy - or register Rr with the bit pattern xy 
+8 AND Rr, xy - and register Rr with the bit pattern xy
+9 XOR Rr, xy - xor register Rr with the bit pattern xy
+A ROT Rr, 0y - rotate
+B JMP Rr, xy - compare register Rr with R0 and jump to address xy if equal
 C HLT 0, 00 - halt
-D PSH r, xy - push stack from r, xy elements
-E POP r, xy - pop stack from r, xy elements (POP 0, 00 pops LR TO PC)
-F CAL 0, xy - call function on address xy
+D PSH R0, R1 ... - push to stack from registers R0, R1, ...
+E POP R0, R1 ... - pop from stack to registers R0, R1, ... (Special case: POP PC will pop the link register into the program counter)
+F CAL 0, xy - call function on address xy and store return address in link register
 
-Mode Branch memory map:
-+----------------------+ 0x00
-| Main program         | ← starts at address 0x00
-|                      |
-| ...                  |
-| CALL functionX       | ← when executed, jumps to function code
-| ...                  |
-+----------------------+ <- function section (e.g., 0x80)
-| Function: functionX  |
-| ...                  |
-| POP PC               |
-+----------------------+ <- stack grows upwards from here (e.g., 0xF0)
-| Stack(SP points here)|
-+----------------------+ 0xFF
+
 
 
 
