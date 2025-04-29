@@ -13,6 +13,9 @@ class Navbar extends Component {
             <a onClick={(e) => handleChangeModeClick("Branch", e)}>Branch</a>
             <div class="animation start-home"></div>
             </nav>
+            <a class="menu-btn" onClick={(e) => handleChangeModeClick("Menu", e)}>
+              Help
+            </a>
         </header>
             
     );

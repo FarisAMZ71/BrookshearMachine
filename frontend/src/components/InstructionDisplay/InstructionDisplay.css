@@ -1,0 +1,35 @@
+/* Table container */
+.instruction-display {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+.instruction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+  }
+  
+  .instruction-table-head th {
+    background: #f0f0f0;
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .instruction-table-body td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .col-mnemonic { width: 3%; }
+  .col-pattern  { width: 11%; }
+  .col-opcode   { width: 8%; }
+  .col-operand  { width: 7%; }
+  .col-description { width: 40%; }
+  .floating { 
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+}
+  

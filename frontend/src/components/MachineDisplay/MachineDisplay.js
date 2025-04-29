@@ -313,7 +313,6 @@ class MachineDisplay extends Component {
     return (
       <div className="machine-display">
         <h1>Register and Memory Display</h1>
-        {/* <InstructionDisplay/> */}
         <div className="machine-display-header">
           <div className="register-container">
             <RegisterDisplay
@@ -349,6 +348,9 @@ class MachineDisplay extends Component {
             memory={memory}
             program_counter={this.state.program_counter} />
           </div>
+          <div className="help-container">
+        <InstructionDisplay/>
+        </div>
         </div>
       </div>
     );

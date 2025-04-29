@@ -20,8 +20,8 @@
 
 /* Max width when in Grid View */
 .memory-display.grid-mode {
-    max-width: 35rem;
-    min-width: 30rem;
+    max-width: 32rem;
+    min-width: 10rem;
 }
 
 .view-toggle {
