@@ -4,6 +4,7 @@ import MemoryDisplay from '../MemoryDisplay/MemoryDisplay';
 import RegisterDisplay from '../RegisterDisplay/RegisterDisplay';
 import AssemblyDisplay from '../AssemblyDisplay/AssemblyDisplay';
 import StackDisplay from '../StackDisplay/StackDisplay';
+import InstructionDisplay from '../InstructionDisplay/InstructionDisplay';
 // import '../MemoryDisplay/MemoryDisplay.css';
 // import '../RegisterDisplay/RegisterDisplay.css';
 import './MachineDisplay.css';
@@ -312,6 +313,7 @@ class MachineDisplay extends Component {
     return (
       <div className="machine-display">
         <h1>Register and Memory Display</h1>
+        {/* <InstructionDisplay/> */}
         <div className="machine-display-header">
           <div className="register-container">
             <RegisterDisplay

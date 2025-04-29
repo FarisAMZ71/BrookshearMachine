@@ -56,7 +56,9 @@ class App extends Component {
   render() {
     const { testCon } = this.state;
     return (
+      
       <div className="app-header">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.8.69/pdf_viewer.min.css" integrity="sha512-qBj3yMdvzL7dOHWfvs21eTD0LURNR9Jhcy5ZMfR7E5NOKev5i9Iu49Yuijdm/or10JyenuaRuflq6DG/E04fcQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <Navbar 
           handleChangeModeClick={this.handleChangeModeClick}/>
         <p>{testCon ? testCon : "Loading..."}</p>

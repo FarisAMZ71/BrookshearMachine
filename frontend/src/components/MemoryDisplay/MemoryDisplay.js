@@ -11,8 +11,6 @@ const MemoryDisplay = ({ memory, program_counter }) => {
   const renderListView = () => {
     return memory.map((value, address) => {
         const isRightColumn = address % 2 === 1; // Identifies 2nd column
-        console.log("Address: ", address);
-        console.log("Program Counter: ", program_counter);
         return (
             <div key={address} className={`memory-cell ${address === program_counter? "highlight" : ""}`}>
                 {!isRightColumn && ( // First Column: Address on Left, Value on Right

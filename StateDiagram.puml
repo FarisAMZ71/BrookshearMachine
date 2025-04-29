@@ -1,0 +1,25 @@
+@startuml machine
+
+[*] --> Idle : Page Loads
+
+Idle : User sees assembler, memory, registers, mode options
+
+Idle --> WritingAssembly : User types in assembler box
+WritingAssembly --> MachineCodeConverted : Presses Convert
+MachineCodeConverted : Machine code generated
+MachineCodeConverted --> ProgramLoaded : Presses Load
+Idle --> ProgramLoaded : Uploads Program
+ProgramLoaded : Program loaded into memory
+ProgramLoaded --> ProgramLoaded : Saves Program
+ProgramLoaded --> Running : Presses Run
+ProgramLoaded --> Stepping : Presses Step
+Running : Program runs to completion
+Running --> ProgramLoaded : Program finished
+Stepping : Executes one instruction
+Stepping --> ProgramLoaded : Step complete
+ProgramLoaded --> Idle : Clear Memory
+ProgramLoaded --> Idle : Clear CPU
+
+Idle --> Idle : Change Machine Mode
+
+@enduml

@@ -12,6 +12,17 @@ STR R2, 11
 LEA R3, 11
 HLT
 
+Sum of [1, 10]
+LDR R1, 00 // int i = 0
+LDR R0, 0A // i != 10
+LDR R2, 01 // i++
+LDR R3, 00 // Sum result
+JMP R1, 10 // Exit loop
+ADT R3, R1, R3 // R3 + i
+ADT R1, R1, R2 // increment i
+JMP R0, 08 //loop
+HLT
+
 LDR 0, 10
 PSH 0, 00
 PSH 0, 00

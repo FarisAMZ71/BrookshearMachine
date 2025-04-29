@@ -38,7 +38,7 @@ class Assembler:
             operands = [x.strip() for x in operands]
 
             # Handle ADT and ADF with three-register format
-            if instruction in ("ADT", "ADF"):
+            if instruction in ("ADT", "ADF", "ORR", "AND", "XOR"):
                 if len(operands) != 3:
                     raise Exception(f"{instruction} requires three register operands in line {i+1}")
                 dest, src1, src2 = operands

@@ -1,0 +1,9 @@
+LDR R1, 00 // int i = 0
+LDR R0, 0A // i != 10
+LDR R2, 01 // i++
+LDR R3, 00 // Sum
+JMP R1, 10 // Exit loop
+ADT R3, R1, R3 // R3 + i
+ADT R1, R1, R2 // increment i
+JMP R0, 08 //loop
+HLT
