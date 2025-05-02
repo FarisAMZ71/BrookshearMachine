@@ -56,7 +56,12 @@ class Machine:
             case 0x4:
                 self.cpu.write(operation["operand3"], self.cpu.read(operation["operand2"]))
             case 0x5:
-                self.cpu.write(operation["operand1"], self.cpu.read(operation["operand2"]) + self.cpu.read(operation["operand3"]))
+                result = self.cpu.read(operation["operand2"]) + self.cpu.read(operation["operand3"])
+                carry = result > 0xFF
+                if carry:
+                    result &= 0xFF  # Simulate 8-bit overflow
+                self.cpu.write(operation["operand1"], result)
+
             case 0x6:
                 self.cpu.write(operation["operand1"], self.utils.encode_to_8bit_floating_point(
                     self.utils.decode_8bit_floating_point(self.cpu.read(operation["operand2"])) + 
@@ -84,10 +89,16 @@ class Machine:
 
     # Run the machine
     def Run(self):
+        step_count = 0
         while not self.halted:
+            if step_count >= 10000:
+                print("Error: Execution exceeded 10000 steps. Halting to prevent infinite loop.")
+                self.halted = True
+                break
             self.Fetch()
             operation = self.Decode()
             self.Execute(operation)
+            step_count += 1
         self.halted = False
 
     # Step one clock cycle

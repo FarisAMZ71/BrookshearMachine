@@ -23,7 +23,7 @@ class CPU:
         if index < 0 or index >= len(self.registers):
             raise Exception("Invalid register index")
         if value < 0 or value > 255:
-            raise Exception("Invalid register value")
+            raise Exception(f"Invalid register value: {value}")
         self.registers[index] = value
         return self.registers[index]
     

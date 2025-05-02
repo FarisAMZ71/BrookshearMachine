@@ -1,0 +1,37 @@
+// Brookshear assembly translation of the 16-bit words
+
+// BUBBLE SORT
+LDR RF, F0        // 2FF0
+LDR RE, F7        // 2EF7
+LDR RD, FF        // 2DFF
+LDR RC, 80        // 2C80
+LDR RB, 01        // 2B01
+LDR RA, 00        // 2A00
+LDR R9, 00        // 2900
+STR RF, 11        // 3F11
+LEA R1, F7        // 11F7
+ADT RF, RF, RB    // 5FFB
+STR RF, 17        // 3F17
+LEA R2, F8        // 12F8
+XOR R0, R1, RD    // 901D
+ADT R0, R0, RB    // 500B
+ADT R0, R0, R2    // 5002
+AND R0, R0, RC    // 800C
+JMP RA, 30        // BA30
+ADT RF, RF, RD    // 5FFD
+STR RF, 27        // 3F27
+STR R2, F0        // 32F0
+ADT RF, RF, RB    // 5FFB
+STR RF, 2D        // 3F2D
+STR R1, F1        // 31F1
+LDR R9, 01        // 2901
+ADT R0, RF, RA    // 50FA
+JMP RE, 36        // BE36
+JMP R0, 0E        // B00E
+ADT R0, R9, RA    // 509A
+JMP RA, 42        // BA42
+LDR RF, F0        // 2FF0
+LDR R9, 00        // 2900
+ADT RE, RE, RD    // 5EED
+JMP R0, 0E        // B00E
+HLT               // C000

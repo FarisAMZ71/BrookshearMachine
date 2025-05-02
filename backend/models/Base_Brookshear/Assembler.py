@@ -46,11 +46,11 @@ class Assembler:
                     if not reg.upper().startswith("R"):
                         raise Exception(f"Operand {reg} is not a register in line {i+1}")
                     reg_num = reg[1:]
-                    if not reg_num.isdigit() or int(reg_num) < 0 or int(reg_num) > 15:
+                    if int(reg_num, 16) < 0 or int(reg_num, 16) > 15:
                         raise Exception(f"Invalid register {reg} in line {i+1}")
-                dest_hex = format(int(dest[1:]), "X")
-                src1_hex = format(int(src1[1:]), "X")
-                src2_hex = format(int(src2[1:]), "X")
+                dest_hex = format(int(dest[1:], 16), "X")
+                src1_hex = format(int(src1[1:], 16), "X")
+                src2_hex = format(int(src2[1:], 16), "X")
                 # Encode as: opcode + dest + src1 + src2 (e.g., 5 2 0 1 -> 52 01)
                 machine_code += f"{dest_hex} {src1_hex}{src2_hex} "
                 continue
@@ -62,11 +62,11 @@ class Assembler:
                 if reg1.upper().startswith("R") and reg2.upper().startswith("R"):
                     reg1_num = reg1[1:]
                     reg2_num = reg2[1:]
-                    if (not reg1_num.isdigit() or int(reg1_num) < 0 or int(reg1_num) > 15 or
-                        not reg2_num.isdigit() or int(reg2_num) < 0 or int(reg2_num) > 15):
+                    if (int(reg1_num, 16) < 0 or int(reg1_num, 16) > 15 or
+                        int(reg2_num, 16) < 0 or int(reg2_num, 16) > 15):
                         raise Exception(f"Invalid register in line {i+1}")
-                    reg1_hex = format(int(reg1_num), "X")
-                    reg2_hex = format(int(reg2_num), "X")
+                    reg1_hex = format(int(reg1_num, 16), "X")
+                    reg2_hex = format(int(reg2_num, 16), "X")
                 else:
                     raise Exception(f"Both operands for MOV must be registers in line {i+1}")
                 machine_code += f"0 {reg1_hex}{reg2_hex} "
@@ -76,9 +76,10 @@ class Assembler:
             reg = operands[0]
             if reg.upper().startswith("R"):
                 reg_num = reg[1:]
-                if not reg_num.isdigit() or int(reg_num) < 0 or int(reg_num) > 15:
+                print(f"reg_num: {int(reg_num, 16)}")
+                if int(reg_num, 16) < 0 or int(reg_num, 16) > 15:
                     raise Exception(f"Invalid register in line {i+1}")
-                reg_hex = format(int(reg_num), "X")
+                reg_hex = format(int(reg_num, 16), "X")
             else:
                 # fallback for numeric register (legacy)
                 if int(reg, 16) < 0 or int(reg, 16) > 15:

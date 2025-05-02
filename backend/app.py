@@ -5,6 +5,7 @@ import sys
 from models import *
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from services.Utils import Utils
+import traceback
 
 app = Flask(__name__)
 CORS(app)  
@@ -67,6 +68,7 @@ def run_machine():
         if machine_mode == "Branch":
             ret["cpu"]["link_register"] = machine.cpu.link_register
     except Exception as e:
+        print("Error:", e)
         return jsonify({
             "success": False,
             "error": str(e)
@@ -158,6 +160,7 @@ def convert():
         print(machine.assembler.assembly_code)
         print(machine.assembler.machine_code)
     except Exception as e:
+        traceback.print_exc()
         return jsonify({
             "success": False,
             "error": str(e)
