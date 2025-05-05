@@ -39,9 +39,10 @@ const MemoryDisplay = ({ memory, program_counter }) => {
       let rowCells = [];
       for (let col = 0; col < 16; col++) {
         const address = row * 16 + col;
+        if (address >= memory.length) break; // Avoids rendering out of bounds
         rowCells.push(
           <td key={address} className={`memory-grid-cell ${address === program_counter ? "highlight" : ""}`}>
-            {memory[address].toString(16).padStart(2, "0").toUpperCase()}
+            {memory[address] !== undefined ? memory[address].toString(16).padStart(2, "0").toUpperCase() : "00"}
           </td>
         );
       }
