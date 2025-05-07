@@ -1,0 +1,36 @@
+START: 
+  LDR R0, 0F // Loop counter
+  LDR R6, 90 // Plaintext pointer
+  LDR R8, A0 // Ciphertext pointer
+  LDR R9, 01 // Incrementer
+  JMP RA, 1E // Jump to Halt
+  CAL LFSR
+  STR R6, 0F
+  LEA R7, 00 // Store PT value in R7
+  XOR R4, R3, R7 // XOR LFSR dropped bit with R7
+  STR R8, 15
+  STR R4, 00 // Store where CT pointer is
+  ADT RA, RA, R9 // Increments
+  ADT R6, R6, R9
+  ADT R8, R8, R9
+  JMP R0, 08 // Jump to loop start
+  HLT
+LFSR:
+  LEA R1, 82 // Load 3rd bit of register
+  LEA R2, 84 // Load 5th bit of register
+  LEA R3, 85 // Load dropped bit
+  XOR R4, R1, R2
+  STR R4, 3F
+  LEA R5, 84 // Shift register
+  STR R5, 85
+  LEA R5, 83
+  STR R5, 84
+  LEA R5, 82   
+  STR R5, 83
+  LEA R5, 81   
+  STR R5, 82 
+  LEA R5, 80   
+  STR R5, 81
+  LDR R5, 00   
+  STR R5, 80
+  POP PC

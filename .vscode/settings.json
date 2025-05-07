@@ -1,5 +1,20 @@
 {
     "python.analysis.extraPaths": [
         "./backend/services"
-    ]
+    ],
+    // Ensure VS Code knows about your WSL profile
+    "terminal.integrated.profiles.windows": {
+    "Ubuntu": {
+      "path": "C:\\Windows\\System32\\wsl.exe",
+      "args": ["-d", "Ubuntu"],   // change the distro name if needed
+      "icon": "terminal-ubuntu"
+    }
+  },
+  
+  // Regular terminals
+  "terminal.integrated.defaultProfile.windows": "Ubuntu",
+  
+  // Terminals created by tasks, debug sessions **and Copilot Agent Mode**
+  "terminal.integrated.automationProfile.windows": "Ubuntu"
+  
 }

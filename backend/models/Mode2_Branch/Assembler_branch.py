@@ -24,70 +24,101 @@ class Assembler_Branch(Assembler_Stack):
     def assemble(self, assembly_code: str):
         self.assembly_code = assembly_code
         cleaned_code = self.clean(assembly_code)
-        machine_code = ["00"] * 256  # full memory map
+        machine_code = ["00"] * 256          # full 256-byte memory map
 
-        label_table = {}
-        current_address = 0
-
-        # First pass: build label table with corrected byte size
+        # ─────────────────────────────
+        # Pass 1:  collect label addresses
+        # ─────────────────────────────
+        label_table, pc = {}, 0
         for line in cleaned_code:
-            if ':' in line:
-                label = line.split(':')[0].strip()
-                label_table[label] = current_address
-            else:
-                mnemonic = line.split(" ")[0]
-                if mnemonic == "CAL" or mnemonic == "HLT":
-                    current_address += 2  # 2 bytes for CAL and HLT
-                else:
-                    current_address += 2  # all other instructions are 2 bytes
+            if ":" in line:                           # label definition
+                label_table[line.split(":")[0].strip()] = pc
+            else:                                     # every instr == 2 bytes
+                pc += 2
 
-        # Second pass: generate machine code
-        current_address = 0
-        for i, line in enumerate(cleaned_code):
-            if ':' in line:
-                continue  # skip label-only lines
+        # ─────────────────────────────
+        # Pass 2:  encode instructions
+        # ─────────────────────────────
+        pc = 0
+        for i, line in enumerate(cleaned_code, start=1):          # line numbers 1-based
+            if ":" in line:                                       # skip label lines
+                continue
 
-            parts = line.strip().split(" ", 1)
-            mnemonic = parts[0]
-            operands = parts[1] if len(parts) > 1 else ""
-
+            mnemonic, *rest = line.strip().split(None, 1)
+            operands = rest[0] if rest else ""
             if mnemonic not in self.instruction_map:
-                raise Exception(f"Invalid instruction '{mnemonic}' on line {i+1}")
+                raise Exception(f"Invalid instruction '{mnemonic}' on line {i}")
 
             opcode = self.instruction_map[mnemonic]
 
+            # ── HLT (no operands) ────────────────────────────────────────────
             if mnemonic == "HLT":
-                machine_code[current_address] = opcode + "0"
-                machine_code[current_address + 1] = "00"
-                current_address += 2
-            elif mnemonic == "CAL":
+                machine_code[pc]     = opcode + "0"
+                machine_code[pc + 1] = "00"
+                pc += 2
+                continue
+
+            # ── CAL label ────────────────────────────────────────────────────
+            if mnemonic == "CAL":
                 target = operands.strip()
                 if target not in label_table:
-                    raise Exception(f"Undefined label '{target}' on line {i+1}")
-                address = label_table[target]
-                machine_code[current_address] = opcode + "0"
-                machine_code[current_address + 1] = "{:02x}".format(address)
-                current_address += 2
-            elif mnemonic == "POP" and operands.strip().upper() == "PC":
-                # Special case for POP PC: opcode E, operands 00
-                machine_code[current_address] = opcode + "0"
-                machine_code[current_address + 1] = "00"
-                current_address += 2
-            else:
-                regs = operands.split(",")
-                if len(regs) != 2:
-                    raise Exception(f"Expected 2 operands on line {i+1}")
-                r1 = regs[0].strip()
-                val = regs[1].strip()
+                    raise Exception(f"Undefined label '{target}' on line {i}")
+                addr = label_table[target]
+                machine_code[pc]     = opcode + "0"
+                machine_code[pc + 1] = f"{addr:02X}"
+                pc += 2
+                continue
 
-                if int(r1, 16) < 0 or int(r1, 16) > 15:
-                    raise Exception(f"Invalid register in line {i+1}")
-                if int(val, 16) < 0 or int(val, 16) > 255:
-                    raise Exception(f"Invalid value in line {i+1}")
+            # ── POP PC (special) ─────────────────────────────────────────────
+            if mnemonic == "POP" and operands.strip().upper() == "PC":
+                machine_code[pc]     = opcode + "0"
+                machine_code[pc + 1] = "00"
+                pc += 2
+                continue
 
-                machine_code[current_address] = opcode + r1.lower()
-                machine_code[current_address + 1] = "{:02x}".format(int(val, 16)).lower()
-                current_address += 2
+            # Split operands and normalise register tokens ("A" or "RA" → "A")
+            regs = [tok.strip().upper() for tok in operands.split(",")]
+            regs = [tok[1:] if tok.startswith("R") else tok for tok in regs]
 
-        self.machine_code = " ".join(machine_code[:current_address]).strip()
+            # ░░░░░ Handle two-operand format  (R ,  byte) ░░░░░
+            if len(regs) == 2:
+                reg, byte = regs
+                # validate register
+                if not reg.isalnum() or int(reg, 16) > 15:
+                    raise Exception(f"Invalid register on line {i}")
+                # validate byte operand (0–FF)
+                if not byte.isalnum() or int(byte, 16) > 255:
+                    raise Exception(f"Invalid byte operand on line {i}")
+
+                machine_code[pc]     = opcode + reg.upper()
+                machine_code[pc + 1] = f"{int(byte,16):02X}"
+                pc += 2
+                continue
+
+            # ░░░░░ Handle three-register format (ADT / ADF / ORR / AND / XOR) ░░░░░
+            if mnemonic in ("ADT", "ADF", "ORR", "AND", "XOR") and len(regs) == 3:
+                d, s, t = regs
+                for r in (d, s, t):
+                    if not r.isalnum() or int(r, 16) > 15:
+                        raise Exception(f"Invalid register on line {i}")
+                machine_code[pc]     = opcode + d.upper()
+                machine_code[pc + 1] = f"{int(s,16):X}{int(t,16):X}".lower()
+                pc += 2
+                continue
+
+            # ░░░░░ Handle MOV (two registers) ░░░░░
+            if mnemonic == "MOV" and len(regs) == 2:
+                d, s = regs
+                for r in (d, s):
+                    if not r.isalnum() or int(r, 16) > 15:
+                        raise Exception(f"Invalid register on line {i}")
+                machine_code[pc]     = opcode + "0"
+                machine_code[pc + 1] = f"{int(d,16):X}{int(s,16):X}".lower()
+                pc += 2
+                continue
+
+            raise Exception(f"Incorrect operand format on line {i}")
+
+        # join everything we actually emitted
+        self.machine_code = " ".join(machine_code[:pc]).strip()
         return self.machine_code

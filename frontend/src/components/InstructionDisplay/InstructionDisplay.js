@@ -108,7 +108,7 @@ return (
             </tr>
             <tr>
             <td class="col-mnemonic">JMP</td>
-            <td class="col-pattern">R{<b>R</b>}, 0X</td>
+            <td class="col-pattern">R{<b>R</b>}, XY</td>
             <td class="col-opcode">B</td>
             <td class="col-operand">RXY</td>
             <td class="col-description">

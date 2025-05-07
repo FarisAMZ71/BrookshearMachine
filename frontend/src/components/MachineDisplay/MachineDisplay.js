@@ -107,7 +107,7 @@ class MachineDisplay extends Component {
           this.setState({ stack_pointer: data.cpu.stack_pointer });
         }
         if (this.props.machine_mode === 'Branch') {
-          this.setState({ link_register: response.data.cpu.link_register });
+          this.setState({ link_register: data.cpu.link_register });
         }
       })
       .catch(error => {
@@ -142,7 +142,7 @@ class MachineDisplay extends Component {
           this.setState({ stack_pointer: data.cpu.stack_pointer });
         }
         if (this.props.machine_mode === 'Branch') {
-          this.setState({ link_register: response.data.cpu.link_register });
+          this.setState({ link_register: data.cpu.link_register });
         }
       })
       .catch(error => {

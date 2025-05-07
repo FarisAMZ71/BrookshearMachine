@@ -74,6 +74,7 @@ class Assembler:
 
             # Handle labeled register (e.g., "R1")
             reg = operands[0]
+            print(f"reg: {reg}")
             if reg.upper().startswith("R"):
                 reg_num = reg[1:]
                 print(f"reg_num: {int(reg_num, 16)}")
