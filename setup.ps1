@@ -72,7 +72,7 @@ if (!(Test-Path $req)) { Abort "requirements.txt not found at $req" }
 
 Write-Info "Installing backend requirements…"
 pip install -r $req
-& .\venv\Scripts\Deactivate.ps1
+& .\venv\Scripts\Deactivate.bat
 
 # ── Finish ───────────────────────────────────────────────────────────────
 Write-Host ""

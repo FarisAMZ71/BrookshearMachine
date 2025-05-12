@@ -53,7 +53,11 @@ The project follows a client-server architecture:
 
 1. Open PowerShell as Administrator
 2. Navigate to the project root directory
-3. Run the setup script:
+3. If you encounter execution policy restrictions, run:
+   ```powershell
+   Set-ExecutionPolicy Bypass -Scope Process -Force
+   ```
+4. Run the setup script:
    ```powershell
    .\setup.ps1
    ```
