@@ -1,27 +1,119 @@
-\section{Testing}
+\chapter{Requirements and Analysis}
 
-\subsection{Pytests}
-The backend system of the Brookshear Machine was extensively tested using the pytest framework, with comprehensive test coverage across all core components. The testing suite utilized several libraries including pytest for the test framework, unittest.mock for mocking file operations and system interactions, and sys/os modules for path management. Each component of the system—Memory, CPU, Machine, and Assembler—had dedicated test modules, with specialized variants for each operating mode (Base, Stack, and Branch). The tests validated initialization procedures, error handling mechanisms, and core functionality workflows. For the Memory module, tests verified proper memory access, boundary condition handling, import/export capabilities, and program loading. CPU tests confirmed register operations, program counter management, and mode-specific features such as stack pointer handling in Stack mode and link register functionality in Branch mode. Machine tests evaluated the complete fetch-decode-execute cycle through simulated program executions, including the Fibonacci sequence verification. Assembler tests thoroughly validated syntax parsing, instruction encoding, register addressing (including support for Rx notation), operand validation, and specialized instructions like CAL and HLT. Exception handling was systematically tested with invalid inputs to ensure robust error reporting. The test suite achieved high code coverage with approximately 95\% of backend code exercised through 60+ individual test cases, providing a robust verification foundation for the system's correctness and reliability.
+\label{chap:requirements}
+\section{Introduction}
+This document outlines the requirements and analysis for the educational simulation project, detailing both functional and non-functional aspects that are crucial for its development and implementation.
+The project aims to create a simulation of the Brookshear Machine, an educational tool designed to help students understand the fundamental concepts of computer architecture and assembly language programming. The simulation will provide an interactive environment where users can visualize the machine's operations, step through instructions, and gain insights into how a computer executes programs.
+The Brookshear Machine is a simplified model of a computer architecture, designed to illustrate the basic principles of how computers operate. It consists of a set of registers, memory, and a control unit that executes instructions. The machine's instruction set includes basic operations such as loading data into registers, performing arithmetic operations, and controlling program flow through jumps and branches. By simulating this machine, students can gain hands-on experience with assembly language programming and better understand the underlying principles of computer architecture.
 
+\section{Project Requirements}
 
+\subsection{Functional Requirements}
 
-\subsection{JS Tests}
-The JavaScript frontend of the Brookshear Machine was rigorously tested using the Jest framework, ensuring comprehensive coverage of all core components. The testing suite employed libraries such as React Testing Library for component rendering and interaction, and Jest's built-in mocking capabilities for simulating API calls and state management. Each component of the frontend—Memory, CPU, Machine, and Assembler—was subjected to dedicated test modules, with a focus on both unit and integration tests. The tests validated component rendering, state transitions, event handling, and user interactions. For the Memory module, tests confirmed proper display of memory contents, address navigation, and import/export functionalities. CPU tests verified register displays, program counter updates, and mode-specific features like stack pointer visualization in Stack mode and link register representation in Branch mode. Machine tests evaluated the complete user interface workflow through simulated program executions, including the Fibonacci sequence verification. Assembler tests thoroughly validated syntax parsing, instruction encoding, register addressing (including support for Rx notation), operand validation, and specialized instructions like CAL and HLT. Exception handling was systematically tested with invalid inputs to ensure robust error reporting. The test suite achieved high code coverage with approximately 95\% of frontend code exercised through 60+ individual test cases, providing a solid verification foundation for the system's correctness and reliability.
-The tests were executed in a continuous integration environment, ensuring that any changes to the codebase were automatically validated against the test suite. This approach facilitated early detection of regressions and maintained the overall integrity of the system throughout the development process. The combination of backend and frontend testing provided a comprehensive validation framework, ensuring that both components functioned correctly in isolation and together as a cohesive system.
+The following functional requirements define the core features that the system must support to fulfill its educational purpose:
 
-\subsection{End-to-End tests}
-The Brookshear Machine was subjected to rigorous end-to-end testing to ensure the seamless integration of its frontend and backend components. This testing phase focused on validating the complete user experience, from program input through execution and output display. The end-to-end tests were designed to simulate real-world usage scenarios, encompassing a wide range of functionalities including program loading, execution, and result verification.
-The testing suite utilized tools such as Cypress for browser-based testing, enabling the simulation of user interactions with the graphical interface. Each test case was crafted to cover critical workflows, including:
+\begin{enumerate}
+    \item[FR-01] \textbf{Backend Simulation:} The system must implement a backend simulation using Python and Flask, handling the logic behind the machine's operations, including the Fetch-Decode-Execute cycle, register management, and memory interactions.
+    
+    \item[FR-02] \textbf{Frontend Interface:} The system must provide an interactive user interface built with ReactJS that allows users to control and visualize the simulation.
+    
+    \item[FR-03] \textbf{State Visualization:} The interface must support visualizing registers, memory, and the execution of instructions in real-time.
+    
+    \item[FR-04] \textbf{Execution Control:} Users must be able to interact with the simulation, including manually stepping through instructions or running programs at full speed.
+    
+    \item[FR-05] \textbf{Assembler:} The system must include a custom assembler that allows users to write assembly code, which will then be parsed and converted into machine code by the backend.
+    
+    \item[FR-06] \textbf{Instruction Set:} The simulation must implement the 12 basic operations of the Brookshear Machine (such as LOAD, STORE, ADD, OR, and JUMP).
+    
+    \item[FR-07] \textbf{Real-time Updates:} The simulation must handle real-time execution updates, providing a seamless experience when users step through instructions.
+    
+    \item[FR-08] \textbf{Error Feedback:} The system must display errors or state changes in a clear and informative manner to guide users through the debugging process.
+    
+    \item[FR-09] \textbf{Program Persistence:} The system must allow users to save and load their assembly programs for future use.
+    
+    \item[FR-10] \textbf{Memory Editing:} Users must be able to directly edit memory values for testing and debugging purposes.
+    
+    \item[FR-11] \textbf{Register Inspection:} The system must provide detailed information about register states before and after instruction execution.
+    
+    \item[FR-12] \textbf{Binary/Hexadecimal Display:} The system must support displaying memory and register values in both binary and hexadecimal formats.
+    
+    \item[FR-13] \textbf{Program Counter Visualization:} The system must visually indicate the current position of the program counter in the instruction memory.
+    
+    \item[FR-14] \textbf{Breakpoints:} Users must be able to set breakpoints in their code to pause execution at specific instructions.
+    
+    \item[FR-15] \textbf{Execution History:} The system must maintain a history of executed instructions to allow users to review the program flow.
+\end{enumerate}
+
+\subsection{Non-Functional Requirements}
+
+The following non-functional requirements address the broader aspects of the system that ensure a smooth user experience and support future growth:
+
+\begin{enumerate}
+    \item[NFR-01] \textbf{Performance:} The simulation must execute instructions efficiently with minimal latency. The backend must process instructions and update the UI promptly to maintain an interactive experience.
+    
+    \item[NFR-02] \textbf{Usability:} The user interface must be intuitive and accessible to students with varying levels of expertise in computer architecture.
+    
+    \item[NFR-03] \textbf{Documentation:} The system must include comprehensive documentation that explains how to use the simulator and the underlying principles of the Brookshear Machine.
+    
+    \item[NFR-04] \textbf{Accessibility:} The interface must implement color coding that caters to users with color blindness, ensuring that the UI remains distinguishable for all users.
+    
+    \item[NFR-05] \textbf{Extensibility:} The code architecture must be modular and scalable, supporting the addition of new instructions, features, and possibly other machine architectures.
+    
+    \item[NFR-06] \textbf{Responsiveness:} The user interface must be responsive and function correctly across different screen sizes and devices.
+    
+    \item[NFR-07] \textbf{Reliability:} The system must operate consistently without crashes or unexpected behavior during normal usage.
+    
+    \item[NFR-08] \textbf{Maintainability:} The codebase must be well-structured, commented, and follow best practices to facilitate future maintenance.
+    
+    \item[NFR-09] \textbf{Compatibility:} The system must be compatible with major web browsers (Chrome, Firefox, Safari, Edge).
+    
+    \item[NFR-10] \textbf{Load Time:} The application must load within a reasonable time frame (less than 5 seconds on standard internet connections).
+\end{enumerate}
+
+\section{Technologies for Simulation Development}
+
+The development of effective educational simulators hinges on the selection of appropriate technologies that balance functionality, usability, and accessibility. Python and React, as chosen for this project, represent a synergistic combination of backend robustness and frontend interactivity.
+
+\subsection{\textbf{Python for Backend Simulation Development}}
+
+Python stands out as an exemplary choice for simulating computational systems due to its exceptional readability and versatile programming paradigms. The language's high-level abstractions allow developers to focus on implementing the computational logic of the Brookshear Machine rather than wrestling with low-level memory management or complex syntax. Its dynamic typing system enables rapid prototyping and iteration, which was invaluable during the development process of this educational tool.
+
+For this project, the Flask microframework was selected to create a lightweight yet powerful RESTful API that facilitates communication between the frontend and the backend simulation. Flask's minimalist approach provides just enough structure without imposing unnecessary constraints, making it ideal for building an API that primarily serves as a bridge to the core simulation logic. The backend implements a clean separation of concerns through modular architecture:
+
 \begin{itemize}
-    \item Loading a program into memory and verifying its correct representation in the UI.
-    \item Executing a program step-by-step and confirming the expected changes in memory and CPU state.
-    \item Testing the import/export functionalities for both memory and program files, ensuring data integrity during these operations.
-    \item Validating the handling of various instruction sets, including edge cases and error conditions.
-    \item Ensuring that the user interface correctly reflects the underlying state of the machine after each operation.
-
-    \item Testing the responsiveness and performance of the UI during program execution, including handling of long-running processes.
-    \item Verifying the correct display of error messages and handling of invalid inputs.
-    \item Testing the interaction between different components, such as the assembler and the machine, to ensure smooth transitions between stages.
-    \item Validating the correct functioning of the stack and branch modes, including the proper handling of function calls and returns.
-    \item Ensuring that the system behaves correctly under various operating conditions, including low memory scenarios and invalid program states.
+    \item The core Machine class handles the fetch-decode-execute cycle
+    \item Memory and CPU modules encapsulate their respective components
+    \item The Assembler translates human-readable assembly code into machine code
+    \item Extension modules (like Stack and Branch variants) demonstrate object-oriented inheritance patterns
 \end{itemize}
+
+Python's extensive standard library and third-party ecosystem provided essential tools for development, including pytest for test-driven development, which ensured the reliability of critical simulation components. The language's cross-platform compatibility also ensures that the simulation server can be deployed in various educational environments without significant modifications.
+
+While Python's interpreted nature might present performance limitations for large-scale simulations, it offers more than adequate performance for an educational tool like the Brookshear Machine simulator, where clarity and educational value take precedence over raw computational speed.
+
+\subsection{\textbf{React for Interactive Frontend Development}}
+
+React represents a paradigm shift in frontend development through its component-based architecture and virtual DOM implementation. This JavaScript library, maintained by Meta (formerly Facebook) and a vibrant open-source community, offers an ideal foundation for building interactive educational tools that require responsive state management and efficient DOM updates.
+
+For the Brookshear Machine simulator, React's declarative programming model enabled the creation of an intuitive user interface that accurately reflects the internal state of the simulation. The component hierarchy closely mirrors the structure of the machine itself:
+
+\begin{itemize}
+    \item Register components display and allow manipulation of CPU registers
+    \item Memory visualization components present the contents of memory in various formats
+    \item Control panel components provide execution controls (step, run, pause)
+    \item Assembly editor components offer syntax highlighting and error feedback
+    \item Machine state components display the current execution cycle and instruction information
+\end{itemize}
+
+React's unidirectional data flow pattern was particularly beneficial for maintaining consistency between the user interface and the underlying simulation state. When the machine's state changes (whether through user interaction or program execution), these changes propagate predictably through the component tree, ensuring that all parts of the interface remain synchronized.
+
+The project leverages several React ecosystem technologies to enhance development efficiency and user experience:
+
+\begin{itemize}
+    \item React Router for navigation between different simulator modes and views
+    \item Redux for centralized state management of complex simulation data
+    \item Material-UI components for consistent, accessible UI elements
+    \item React Testing Library for component testing and behavior verification
+\end{itemize}
+
+While alternative frontend frameworks like Angular or Vue.js offer their own advantages, React's extensive documentation, large community support, and flexibility made it the optimal choice for this educational application. The ability to incrementally adopt React features and integrate with existing JavaScript libraries also provided development flexibility that would have been more constrained in more opinionated frameworks.

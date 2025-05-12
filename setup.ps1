@@ -1,70 +1,84 @@
-<#  setup.ps1 ── Windows one-shot bootstrap for Flask + React project
-    • Installs Chocolatey (if missing)
-    • Installs Node LTS + npm  and Python 3
-    • Runs npm ci   in  .\frontend
-    • Creates venv  in  .\venv
-    • pip install -r backend\requirements.txt
+<#  setup.ps1  ── bootstrap Node + npm deps (incl. concurrently) + Python venv
+    • Installs Chocolatey if needed
+    • Installs / upgrades Node LTS + Python 3
+    • npm ci   in <frontendPath>
+    • adds concurrently (npm install --save-dev concurrently) if it is not present
+    • python -m venv   venv      &&  pip install -r <requirementsFile>
 #>
 
 param(
-    [string]$FrontEndPath = "frontend",
-    [string]$BackEndReq   = "backend\requirements.txt"
+    [string]$frontEndPath  = "frontend",                   # adjust if needed
+    [string]$requirements  = "backend\requirements.txt"    # "
 )
 
-# ───────────────────────────────────────────────────────────────────
-function Write-Info($msg) { Write-Host "▶ $msg" -ForegroundColor Cyan }
-function Abort($msg)      { Write-Host "✖ $msg" -ForegroundColor Red; exit 1 }
+# ── helper ────────────────────────────────────────────────────────────────
+function Write-Info  ($msg) { Write-Host "▶ $msg" -ForegroundColor Cyan }
+function Write-ErrorMsg ($msg) { Write-Host "✖ $msg" -ForegroundColor Red }
+function Abort ($msg) { Write-ErrorMsg $msg; exit 1 }
 
-# 0.  Require Administrator rights for Chocolatey installs
-If (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
-    Abort "Run PowerShell **as Administrator** (right-click → Run as administrator)"
+# ── require admin (Chocolatey installs) ──────────────────────────────────
+If (-not ([Security.Principal.WindowsPrincipal] `
+    [Security.Principal.WindowsIdentity]::GetCurrent() `
+    ).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)) {
+    Abort "Run PowerShell **as Administrator**."
 }
 
-# 1.  Chocolatey
+# ── Chocolatey ───────────────────────────────────────────────────────────
 if (!(Get-Command choco -ErrorAction SilentlyContinue)) {
     Write-Info "Installing Chocolatey…"
     Set-ExecutionPolicy Bypass -Scope Process -Force
     [System.Net.ServicePointManager]::SecurityProtocol = 3072
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-} else {
-    Write-Info "Chocolatey already installed"
-}
+} else { Write-Info "Chocolatey already present." }
 
-# 2.  Node LTS + Python via Choco (re-run is safe)
-Write-Info "Installing / upgrading Node LTS and Python…"
+# ── Node LTS + Python via choco ──────────────────────────────────────────
+Write-Info "Installing / upgrading Node LTS and Python 3…"
 choco upgrade -y nodejs-lts python
 
-# 3.  Verify tools
-Write-Info "node/npm versions:"
+# refresh PATH for this session
+$env:Path += ";$([Environment]::GetEnvironmentVariable('Path','Machine'))"
+
+Write-Info "Node / npm versions:"
 node -v; npm -v
-Write-Info "python version:"
+Write-Info "Python version:"
 python --version
 
-# 4.  NPM dependencies
-$frontend = Join-Path $PWD $FrontEndPath
-if (!(Test-Path $frontend\package.json)) { Abort "Cannot find package.json in $frontend" }
-Write-Info "Installing JS deps (npm ci) in $FrontEndPath…"
-Push-Location $frontend
+# ── Front-end JS dependencies ────────────────────────────────────────────
+$fe = Join-Path $PWD $frontEndPath
+if (!(Test-Path "$fe\package.json")) { Abort "package.json not found in $fe" }
+
+Write-Info "Running npm ci in $frontEndPath…"
+Push-Location $fe
 npm ci
+
+# ensure concurrently exists (devDependency)
+$needsConcurrently = -not (npm ls concurrently --depth=0 --json | ConvertFrom-Json).dependencies
+if ($needsConcurrently) {
+    Write-Info "Adding concurrently (dev-dependency)…"
+    npm install --save-dev concurrently
+} else {
+    Write-Info "concurrently already listed in package.json"
+}
 Pop-Location
 
-# 5.  Python venv + pip deps
-Write-Info "Creating venv (.\venv)…"
+# ── Python venv + backend deps ───────────────────────────────────────────
+Write-Info "Creating Python virtual env (.\venv)…"
 python -m venv venv
 & .\venv\Scripts\Activate.ps1
-Write-Info "Upgrading pip + wheel"
 pip install --upgrade pip wheel
 
-$reqFile = Join-Path $PWD $BackEndReq
-if (!(Test-Path $reqFile)) { Abort "Cannot find requirements.txt at $reqFile" }
-Write-Info "Installing backend dependencies (pip)…"
-pip install -r $reqFile
-# & .\venv\Scripts\deactivate
+$req = Join-Path $PWD $requirements
+if (!(Test-Path $req)) { Abort "requirements.txt not found at $req" }
 
+Write-Info "Installing backend requirements…"
+pip install -r $req
+& .\venv\Scripts\Deactivate.ps1
+
+# ── Finish ───────────────────────────────────────────────────────────────
 Write-Host ""
-Write-Host "✅  DONE!" -ForegroundColor Green
+Write-Host "✅  Setup complete!" -ForegroundColor Green
 Write-Host ""
-Write-Host "Next steps:"
-Write-Host "1)  .\venv\Scripts\Activate" -ForegroundColor Yellow
-Write-Host "2)  npm run dev          # or whatever script starts Flask + React" -ForegroundColor Yellow
+Write-Host "Next steps:" -ForegroundColor Cyan
+Write-Host "  1)  .\\venv\\Scripts\\Activate" -ForegroundColor Yellow
+Write-Host "  2)  npm run dev           (front-end + back-end together)" -ForegroundColor Yellow
 Write-Host ""
