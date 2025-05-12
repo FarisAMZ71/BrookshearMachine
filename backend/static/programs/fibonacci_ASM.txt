@@ -1,3 +1,5 @@
+// A program that prints all the Fibonacci numbers until E9
+
 LDR R0, E9 // End bit pattern
 LDR R1, F2 // Write pointer
 LDR R2, 01 // Write first 2 fib nums

@@ -47,7 +47,6 @@ def get_cpu():
 
 @app.route('/api/machine_mode', methods=['GET'])
 def get_machine_mode():
-    print(machine_mode)
     return jsonify(
         {"machine_mode": machine_mode}
     )

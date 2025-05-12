@@ -349,7 +349,7 @@ class MachineDisplay extends Component {
             program_counter={this.state.program_counter} />
           </div>
           <div className="help-container">
-        <InstructionDisplay/>
+          <InstructionDisplay/>
         </div>
         </div>
       </div>
