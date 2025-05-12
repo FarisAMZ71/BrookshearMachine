@@ -15,7 +15,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom --transformIgnorePatterns \"node_modules/(?!axios)/\"",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "react": "react-scripts start",
+    "flask": "cd ../backend && python -m flask run --port 5000",
+    "dev": "concurrently -k -n REACT,FLASK -c green,cyan \"npm run react\" \"npm run flask\""
   },
   "browserslist": {
     "production": [
@@ -34,6 +37,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "axios-mock-adapter": "^2.1.0",
+    "concurrently": "^9.1.2",
     "jest-fetch-mock": "^3.0.3",
     "msw": "^2.7.6"
   }
