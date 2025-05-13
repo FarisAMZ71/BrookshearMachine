@@ -1,7 +1,8 @@
 # Brookshear Machine Simulator
 
 This project is a web-based implementation of the Brookshear Machine, a simplified computer architecture model described in "Computer Science: An Overview" by Glenn Brookshear. The simulator provides a visual and interactive way to understand fundamental computing concepts like assembly language, memory management, and CPU operations.
-
+## Link to GitHub Repository
+https://github.com/FarisAMZ71/BrookshearMachine.git
 ## Features
 
 - **Multiple Machine Modes**:
