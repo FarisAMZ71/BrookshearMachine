@@ -1,8 +1,8 @@
 import "./InstructionDisplay.css";
 
-const InstructionDisplay = () => {
+const InstructionDisplay = ({ showHelp }) => {
 return (
-    <div className="instruction-display">
+    <div className={`instruction-display ${showHelp ? "show" : ""}`}>
       <h2>Assembler Guide</h2>
 
         <table class="instruction-table">

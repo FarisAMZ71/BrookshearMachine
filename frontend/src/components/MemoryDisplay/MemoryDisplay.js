@@ -29,7 +29,7 @@ const MemoryDisplay = ({ memory, program_counter }) => {
             </div>
         );
     });
-};
+  };
 
 
   // Generates the Grid View (16x16 memory layout)

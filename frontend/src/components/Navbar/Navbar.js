@@ -3,7 +3,7 @@ import "./Navbar.css"; // We'll define styles in this CSS file
 
 class Navbar extends Component {
   render() {
-    const { handleChangeModeClick } = this.props;
+    const { handleChangeModeClick, updateShowHelp } = this.props;
     return (
         <header>
             <h1>Brookshear +</h1>
@@ -13,7 +13,7 @@ class Navbar extends Component {
             <a onClick={(e) => handleChangeModeClick("Branch", e)}>Branch</a>
             <div className="animation start-home"></div>
             </nav>
-            <a className="menu-btn" onClick={(e) => handleChangeModeClick("Menu", e)}>
+            <a className="menu-btn" onClick={(e) => updateShowHelp()}>
               Help
             </a>
         </header>

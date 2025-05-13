@@ -8,11 +8,13 @@ class App extends Component {
     super(props);
     this.state = {
       testCon: null,
-      machine_mode: "Base"
+      machine_mode: "Base",
+      showHelp: false
     };
 
     this.handleChangeModeClick = this.handleChangeModeClick.bind(this);
     this.updateMachineMode = this.updateMachineMode.bind(this);
+    this.updateShowHelp = this.updateShowHelp.bind(this);
   }
 
   // Fetch the test connection message when the component mounts
@@ -53,17 +55,25 @@ class App extends Component {
       this.setState({ machine_mode: mode });
     }
 
+    updateShowHelp() {
+      this.setState({ showHelp: !this.state.showHelp });
+    }
+
   render() {
     const { testCon } = this.state;
     return (
       
       <div className="app-header">
         <Navbar 
-          handleChangeModeClick={this.handleChangeModeClick}/>
+          handleChangeModeClick={this.handleChangeModeClick}
+          updateShowHelp={this.updateShowHelp}
+        />
         <p>{testCon ? testCon : "Loading..."}</p>
         <MachineDisplay
           machine_mode={this.state.machine_mode}
-          updateMachineMode={this.updateMachineMode}/>
+          updateMachineMode={this.updateMachineMode}
+          showHelp={this.state.showHelp}
+        />
       </div>
     );
   }
